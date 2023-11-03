@@ -1,5 +1,4 @@
 node_modules/
-dist/
 .next/
 
 .vercel
@@ -9,6 +8,5 @@ dist/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.jso
-frontend/.env
-server/.env
+!.vscode/.jso
+.env
