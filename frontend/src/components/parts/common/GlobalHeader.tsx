@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import styled from 'styled-components';
 import { color, zIndex } from '~/styles/utils';
 
@@ -11,19 +10,10 @@ const GlobalHeader = ({ rootRef }: PropsType): JSX.Element => {
   return (
     <Container ref={rootRef}>
       <ContainerLeft>
-        <Image src="/images/viewPers.png" width={110} height={25} alt="logo" />
         <TitleContainer>
-          <HeaderTitle>キーワードツール</HeaderTitle>
+          <HeaderTitle>Text Sonic</HeaderTitle>
         </TitleContainer>
       </ContainerLeft>
-      <ContainerRight>
-        <Image
-          src="/images/logoDiscoverCloud.svg"
-          width={110}
-          height={25}
-          alt="logo"
-        />
-      </ContainerRight>
     </Container>
   );
 };
