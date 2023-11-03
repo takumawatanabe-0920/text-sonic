@@ -12,9 +12,6 @@ const nextConfig = {
     });
     return config;
   },
-  images: {
-    domains: ['imgix.cosmicjs.com'],
-  },
 };
 
 module.exports = nextConfig;

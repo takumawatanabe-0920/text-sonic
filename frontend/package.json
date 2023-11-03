@@ -1,20 +1,18 @@
 {
-  "name": "vp-keyword-tool",
+  "name": "text-sonic",
   "version": "0.1.0",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "next dev -p 3015",
+    "dev": "next dev -p 3016",
     "build": "next build",
-    "start": "next start -p 3015",
+    "start": "next start -p 3016",
     "lint": "next lint",
     "ts:check": "tsc --noEmit",
     "prettier:check": "prettier './**/*.ts{,x}' --check",
     "format": "prettier './**/*.ts{,x}' --write"
   },
   "dependencies": {
-    "@bugsnag/js": "^7.20.2",
-    "@bugsnag/plugin-react": "^7.19.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@hapi/iron": "^7.0.0",
@@ -22,19 +20,16 @@
     "@mui/material": "^5.13.2",
     "@mui/styled-engine-sc": "^5.12.0",
     "cheerio": "^1.0.0-rc.12",
-    "cosmicjs": "^4.3.1",
     "dayjs": "^1.11.7",
     "next": "13.5.4",
     "next-seo": "5.4.0",
     "polished": "^4.2.2",
     "react": "18.2.0",
-    "react-d3-cloud": "^1.0.6",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.42.1",
     "react-toastify": "^9.1.1",
     "styled-components": "^5.3.10",
     "styled-reset": "4.4.2",
-    "swiper": "^8.4.6",
     "swr": "^2.0.0"
   },
   "devDependencies": {

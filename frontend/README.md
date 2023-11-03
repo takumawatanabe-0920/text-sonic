@@ -1,4 +1,4 @@
-# VP-KEYWORD-TOOL
+# text-sonic
 
 ```
 $ npm install

@@ -38,7 +38,7 @@ export default class MyDocument extends Document {
         <Head>
           {/* 社内用ツールなのでnoindex */}
           <meta name="robots" content="noindex,nofollow" />
-          <title>VP-KEYWORD-TOOL</title>
+          <title>text-sonic</title>
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0, viewport-fit=cover"

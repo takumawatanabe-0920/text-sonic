@@ -7,8 +7,8 @@ from .middlware.log_middleware import LogMiddleware
 app = FastAPI()
 app.add_middleware(LogMiddleware)
 origins = [
-    "http://localhost:3015",
-    "https://vp-keyword-tool.vercel.app",
+    "http://localhost:3016",
+    "https://text-sonic.vercel.app",
 ]
 
 app.add_middleware(
@@ -21,4 +21,4 @@ app.add_middleware(
 app.include_router(researches_router)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8081, log_config=None)
+    uvicorn.run(app, host="0.0.0.0", port=8082, log_config=None)
