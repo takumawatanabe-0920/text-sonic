@@ -1,0 +1,10 @@
+version: "3.0"
+
+services:
+  search-api:
+    container_name: "search-api"
+    volumes:
+      - ./app:/app
+    build: .
+    ports:
+      - 8082:8082
