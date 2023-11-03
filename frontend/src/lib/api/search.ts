@@ -11,5 +11,5 @@ export async function searchSuggestions({
   keyword: string | undefined;
 }): Promise<SearchSuggestions> {
   const response = await ApiClient.post('/search-suggestions', { keyword });
-  return await response.json();
+  return (await response.json()).message;
 }
