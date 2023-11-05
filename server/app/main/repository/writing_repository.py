@@ -21,10 +21,10 @@ class BaseWritingRepository:
     def save(self, writing: WritingCreate) -> None:
         raise NotImplementedError()
 
-    def get_by_id(self, id: int) -> Optional[models.WritingInDB]:
+    def get_by_id(self, id: int) -> Optional[WritingGet]:
         raise NotImplementedError()
 
-    def get_all(self) -> List[models.WritingInDB]:
+    def get_all(self) -> List[WritingGet]:
         raise NotImplementedError()
 
     def update(self, id: int, writing: WritingUpdate) -> None:
@@ -86,10 +86,8 @@ class SQLWritingRepository(BaseWritingRepository):
         self._session.add(
             writing,
         )
-        self._session.commit()
-        self._session.refresh(writing)
 
-        return writing
+        return None
 
     def update(self, id: int, writing: WritingUpdate) -> Optional[models.WritingInDB]:
         instance = (
@@ -101,11 +99,6 @@ class SQLWritingRepository(BaseWritingRepository):
             writing_data = writing.dict(exclude_unset=True)
             for key, value in writing_data.items():
                 setattr(instance, key, value)
-
-            self._session.commit()
-            self._session.refresh(instance)
-
-            return instance
 
         return None
 
