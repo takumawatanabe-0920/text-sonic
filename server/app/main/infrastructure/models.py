@@ -3,7 +3,7 @@ import datetime
 from .db.database import Base
 
 
-class Writing(Base):
+class WritingInDB(Base):
     __tablename__ = "writings"
 
     id = Column(Integer, primary_key=True, index=True)

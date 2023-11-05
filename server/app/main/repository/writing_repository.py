@@ -1,47 +1,134 @@
+from MySQLdb import DatabaseError
+from sqlalchemy import Column
 from sqlalchemy.orm import Session
 from infrastructure import models
+from server.app.main.infrastructure.db.database import get_session
 from server.app.main.infrastructure.schemas.writing_schema import (
     WritingCreate,
     WritingGet,
     WritingUpdate,
 )
-from typing import List
+from typing import Iterator, List, Optional
 
 
-class WritingRepository:
-    def __init__(self, db: Session):
-        self.db = db
+class BaseWritingRepository:
+    def __enter__(self):
+        return self
 
-    def get_writings(self):
-        return self.db.query(models.Writing).all()
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        pass
 
-    def get_writing_by_id(self, id: int):
-        return self.__get_by_id(id)
+    def save(self, writing: WritingCreate) -> None:
+        raise NotImplementedError()
 
-    def create_writing(self, writing: WritingCreate):
-        db_writing = models.Writing(
+    def get_by_id(self, id: int) -> Optional[models.WritingInDB]:
+        raise NotImplementedError()
+
+    def get_all(self) -> List[models.WritingInDB]:
+        raise NotImplementedError()
+
+    def update(self, id: int, writing: WritingUpdate) -> None:
+        raise NotImplementedError()
+
+    def delete(self, id: int) -> None:
+        raise NotImplementedError()
+
+
+# SQLAlchemy Implementation of interface
+class SQLWritingRepository(BaseWritingRepository):
+    def __init__(self, session):
+        self._session: Session = session
+
+    def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
+        if any([exc_type, exc_value, exc_traceback]):
+            self._session.rollback()
+
+        try:
+            self._session.commit()
+        except DatabaseError:
+            self._session.rollback()
+            raise
+
+    def save(self, writing: WritingCreate) -> Optional[WritingGet]:
+        writing = models.WritingInDB(
             title=writing.title, description=writing.description
         )
-        self.db.add(db_writing)
-        self.db.commit()
-        self.db.refresh(db_writing)
-        return db_writing
+        self._session.add(
+            writing,
+        )
+        self._session.commit()
+        self._session.refresh(writing)
 
-    def update_writing(self, id: int, writing: WritingUpdate):
-        db_writing = self.__get_by_id(id)
-        if not db_writing:
-            return None
-        db_writing["title"] = writing.title
-        db_writing["description"] = writing.description
-        self.db.commit()
-        self.db.refresh(db_writing)
-        return db_writing
+        return self.get_by_id(writing.id)
 
-    def delete_writing(self, id: int):
-        db_writing = self.__get_by_id(id)
-        self.db.delete(db_writing)
-        self.db.commit()
-        return db_writing
+    def get_by_id(self, id: Column[int]) -> Optional[WritingGet]:
+        instance = (
+            self._session.query(models.WritingInDB)
+            .filter(models.WritingInDB.id == id)
+            .first()
+        )
+        if instance:
+            return WritingGet(
+                id=instance.id,
+                title=instance.title,
+                description=instance.description,
+                created_at=instance.created_at,
+                updated_at=instance.updated_at,
+            )
 
-    def __get_by_id(self, id: int):
-        return self.db.query(models.Writing).filter(models.Writing.id == id).first()
+        return None
+
+    def get_all(self) -> List[WritingGet]:
+        query = self._session.query(models.WritingInDB)
+        return [
+            WritingGet(
+                id=writing.id,
+                title=writing.title,
+                description=writing.description,
+                created_at=writing.created_at,
+                updated_at=writing.updated_at,
+            )
+            for writing in query
+        ]
+
+    def update(self, id: int, writing: WritingUpdate) -> Optional[WritingGet]:
+        instance = (
+            self._session.query(models.WritingInDB)
+            .filter(models.WritingInDB.id == id)
+            .first()
+        )
+        if instance:
+            writing_data = writing.dict(exclude_unset=True)
+            for key, value in writing_data.items():
+                setattr(instance, key, value)
+
+            self._session.commit()
+            self._session.refresh(instance)
+
+            return self.get_by_id(instance.id)
+
+        return None
+
+    def delete(self, id: int) -> None:
+        instance = (
+            self._session.query(models.WritingInDB)
+            .filter(models.WritingInDB.id == id)
+            .first()
+        )
+        if instance:
+            self._session.delete(instance)
+
+        return None
+
+
+def create_writing_repository() -> Iterator[BaseWritingRepository]:
+    session = get_session()()
+    writing_repository = SQLWritingRepository(session)
+
+    try:
+        yield writing_repository
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
