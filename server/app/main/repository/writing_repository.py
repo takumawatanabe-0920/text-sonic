@@ -1,13 +1,13 @@
 from MySQLdb import DatabaseError
 from sqlalchemy import Column
 from sqlalchemy.orm import Session
-from infrastructure import models
 from app.main.infrastructure.db.database import get_session
 from app.main.infrastructure.schemas.writing_schema import (
     WritingCreate,
     WritingGet,
     WritingUpdate,
 )
+from app.main.infrastructure import models
 from typing import Iterator, List, Optional
 
 

@@ -8,7 +8,7 @@ class WritingInDB(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(50))
-    description = Column(String)
+    description = Column(String(100))
 
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.datetime.utcnow)

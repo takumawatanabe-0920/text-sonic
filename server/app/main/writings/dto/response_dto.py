@@ -5,11 +5,17 @@ from sqlalchemy import Column
 
 
 class WritingDto(BaseModel):
-    id: Column[int]
-    title: Column[str]
-    description: Column[str]
-    created_at: Column[datetime]
-    updated_at: Column[datetime]
+    # id: Column[int]
+    # title: Column[str]
+    # description: Column[str]
+    # created_at: Column[datetime]
+    # updated_at: Column[datetime]
+
+    id: int
+    title: str
+    description: str
+    created_at: str
+    updated_at: str
 
 
 class WritingsResponse(BaseModel):

@@ -5,3 +5,5 @@ Pydantic<2.0.0
 sqlalchemy
 pymysql
 psycopg2-binary
+python-dotenv
+cryptography
