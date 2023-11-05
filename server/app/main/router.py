@@ -1,6 +1,6 @@
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from app.main.researches.controllers import router as researches_router
+from app.main.writings.controllers import router as writing_router
 from fastapi import FastAPI
 from .middlware.log_middleware import LogMiddleware
 from .infrastructure.db.database import engine
@@ -22,7 +22,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(researches_router)
+app.include_router(writing_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8082, log_config=None)

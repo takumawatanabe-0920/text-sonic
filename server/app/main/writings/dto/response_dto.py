@@ -1,18 +1,5 @@
+from typing import List, Union
 from pydantic import BaseModel
-from typing import List
-
-
-class WritingBodyDto(BaseModel):
-    title: str
-    description: str
-
-
-class CreateWritingBodyDto(WritingBodyDto):
-    pass
-
-
-class UpdateWritingBodyDto(WritingBodyDto):
-    pass
 
 
 class WritingDto(BaseModel):
@@ -28,4 +15,4 @@ class WritingsResponse(BaseModel):
 
 
 class WritingResponse(BaseModel):
-    message: WritingDto
+    message: Union[WritingDto, None]

@@ -1,27 +1,66 @@
 import os
+from server.app.main.infrastructure.schemas.writing_schema import (
+    WritingCreate,
+    WritingUpdate,
+)
 
-from server.app.main.writings.dto.writings import CreateWritingBodyDto
-from server.app.main.writings.dto.writings import UpdateWritingBodyDto
-from app.main.repository.writings import WritingRepository
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from server.app.main.writings.dto.request_dto import CreateWritingBodyDto
+from server.app.main.writings.dto.request_dto import UpdateWritingBodyDto
+from server.app.main.repository.writing_repository import WritingRepository
+from server.app.main.writings.dto.response_dto import (
+    WritingsResponse,
+    WritingResponse,
+    WritingDto,
+)
 
 
 class WritingService:
     def __init__(self, repository: WritingRepository):
         self.__repository = repository
 
-    def get_writings(self):
-        return self.__repository.get_writings()
+    def get_writings(self) -> WritingsResponse:
+        writings = self.__repository.get_writings()
+        return WritingsResponse(
+            message=[
+                WritingDto(
+                    id=writing["id"],
+                    title=writing.title,
+                    description=writing["description"],
+                    created_at=writing["created_at"],
+                    updated_at=writing.updated_at,
+                )
+                for writing in writings
+            ]
+        )
 
-    def get_writing_by_id(self, id: int):
-        return self.__repository.get_writing_by_id(id)
+    def get_writing_by_id(self, id: int) -> WritingResponse:
+        writing = self.__repository.get_writing_by_id(id)
+        if not writing:
+            return WritingResponse(message=None)
 
-    def create_writing(self, writing: CreateWritingBodyDto):
-        return self.__repository.create_writing(writing)
+        writings = writing.id
 
-    def update_writing(self, id: int, writing: UpdateWritingBodyDto):
-        return self.__repository.update_writing(id, writing)
+        return WritingResponse(
+            message=WritingDto(
+                id=writing.id,
+                title=writing.title,
+                description=writing.description,
+                created_at=writing.created_at,
+                updated_at=writing.updated_at,
+            )
+        )
 
-    def delete_writing(self, id: int):
+    def create_writing(self, writing: CreateWritingBodyDto) -> WritingsResponse:
+        return self.__repository.create_writing(
+            WritingCreate(title=writing.title, description=writing.description)
+        )
+
+    def update_writing(
+        self, id: int, writing: UpdateWritingBodyDto
+    ) -> WritingsResponse:
+        return self.__repository.update_writing(
+            id, WritingUpdate(title=writing.title, description=writing.description)
+        )
+
+    def delete_writing(self, id: int) -> WritingsResponse:
         return self.__repository.delete_writing(id)

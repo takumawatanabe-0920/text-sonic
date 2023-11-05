@@ -6,6 +6,15 @@ class WritingBase(BaseModel):
     description: str
 
 
+class WritingGet(WritingBase):
+    id: int
+    created_at: str
+    updated_at: str
+
+    class Config:
+        orm_mode = True
+
+
 class WritingCreate(WritingBase):
     pass
 

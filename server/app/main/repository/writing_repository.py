@@ -1,6 +1,11 @@
 from sqlalchemy.orm import Session
 from infrastructure import models
-from server.app.main.infrastructure.schemas.writings import WritingCreate, WritingUpdate
+from server.app.main.infrastructure.schemas.writing_schema import (
+    WritingCreate,
+    WritingGet,
+    WritingUpdate,
+)
+from typing import List
 
 
 class WritingRepository:
