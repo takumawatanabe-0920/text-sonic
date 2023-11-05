@@ -1,4 +1,7 @@
 import os
+from typing_extensions import Annotated
+
+from fastapi import Depends
 from server.app.main.infrastructure.schemas.writing_schema import (
     WritingCreate,
     WritingUpdate,
@@ -6,7 +9,10 @@ from server.app.main.infrastructure.schemas.writing_schema import (
 
 from server.app.main.writings.dto.request_dto import CreateWritingBodyDto
 from server.app.main.writings.dto.request_dto import UpdateWritingBodyDto
-from server.app.main.repository.writing_repository import WritingRepository
+from server.app.main.repository.writing_repository import (
+    BaseWritingRepository,
+    create_writing_repository,
+)
 from server.app.main.writings.dto.response_dto import (
     WritingsResponse,
     WritingResponse,
@@ -15,11 +21,14 @@ from server.app.main.writings.dto.response_dto import (
 
 
 class WritingService:
-    def __init__(self, repository: WritingRepository):
-        self.__repository = repository
+    def __init__(
+        self,
+        writing_repository: BaseWritingRepository = Depends(create_writing_repository),
+    ):
+        self.__writing_repository = writing_repository
 
     def get_writings(self) -> WritingsResponse:
-        writings = self.__repository.get_writings()
+        writings = self.__writing_repository.get_all()
         return WritingsResponse(
             message=[
                 WritingDto(
@@ -34,7 +43,7 @@ class WritingService:
         )
 
     def get_writing_by_id(self, id: int) -> WritingResponse:
-        writing = self.__repository.get_writing_by_id(id)
+        writing = self.__writing_repository.get_by_id(id)
         if not writing:
             return WritingResponse(message=None)
 
@@ -51,16 +60,16 @@ class WritingService:
         )
 
     def create_writing(self, writing: CreateWritingBodyDto) -> WritingsResponse:
-        return self.__repository.create_writing(
+        return self.__writing_repository.save(
             WritingCreate(title=writing.title, description=writing.description)
         )
 
     def update_writing(
         self, id: int, writing: UpdateWritingBodyDto
     ) -> WritingsResponse:
-        return self.__repository.update_writing(
+        return self.__writing_repository.update(
             id, WritingUpdate(title=writing.title, description=writing.description)
         )
 
     def delete_writing(self, id: int) -> WritingsResponse:
-        return self.__repository.delete_writing(id)
+        return self.__writing_repository.delete(id)

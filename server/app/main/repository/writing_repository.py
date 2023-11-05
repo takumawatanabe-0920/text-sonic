@@ -49,35 +49,6 @@ class SQLWritingRepository(BaseWritingRepository):
             self._session.rollback()
             raise
 
-    def save(self, writing: WritingCreate) -> Optional[WritingGet]:
-        writing = models.WritingInDB(
-            title=writing.title, description=writing.description
-        )
-        self._session.add(
-            writing,
-        )
-        self._session.commit()
-        self._session.refresh(writing)
-
-        return self.get_by_id(writing.id)
-
-    def get_by_id(self, id: Column[int]) -> Optional[WritingGet]:
-        instance = (
-            self._session.query(models.WritingInDB)
-            .filter(models.WritingInDB.id == id)
-            .first()
-        )
-        if instance:
-            return WritingGet(
-                id=instance.id,
-                title=instance.title,
-                description=instance.description,
-                created_at=instance.created_at,
-                updated_at=instance.updated_at,
-            )
-
-        return None
-
     def get_all(self) -> List[WritingGet]:
         query = self._session.query(models.WritingInDB)
         return [
@@ -91,7 +62,36 @@ class SQLWritingRepository(BaseWritingRepository):
             for writing in query
         ]
 
-    def update(self, id: int, writing: WritingUpdate) -> Optional[WritingGet]:
+    def get_by_id(self, id: int) -> Optional[WritingGet]:
+        writing = (
+            self._session.query(models.WritingInDB)
+            .filter(models.WritingInDB.id == id)
+            .first()
+        )
+        if writing:
+            return WritingGet(
+                id=writing.id,
+                title=writing.title,
+                description=writing.description,
+                created_at=writing.created_at,
+                updated_at=writing.updated_at,
+            )
+
+        return None
+
+    def save(self, writing: WritingCreate) -> Optional[models.WritingInDB]:
+        writing = models.WritingInDB(
+            title=writing.title, description=writing.description
+        )
+        self._session.add(
+            writing,
+        )
+        self._session.commit()
+        self._session.refresh(writing)
+
+        return writing
+
+    def update(self, id: int, writing: WritingUpdate) -> Optional[models.WritingInDB]:
         instance = (
             self._session.query(models.WritingInDB)
             .filter(models.WritingInDB.id == id)
@@ -105,7 +105,7 @@ class SQLWritingRepository(BaseWritingRepository):
             self._session.commit()
             self._session.refresh(instance)
 
-            return self.get_by_id(instance.id)
+            return instance
 
         return None
 

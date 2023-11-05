@@ -3,10 +3,10 @@ import uvicorn
 from app.main.writings.controllers import router as writing_router
 from fastapi import FastAPI
 from .middlware.log_middleware import LogMiddleware
-from .infrastructure.db.database import engine
+from .infrastructure.db.database import get_engine
 from .infrastructure import models
 
-models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=get_engine())
 
 app = FastAPI()
 app.add_middleware(LogMiddleware)
