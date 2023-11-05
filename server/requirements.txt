@@ -2,3 +2,6 @@ fastapi
 uvicorn
 arel
 Pydantic
+sqlalchemy
+pymysql
+psycopg2-binary

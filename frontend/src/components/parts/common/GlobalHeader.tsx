@@ -45,13 +45,10 @@ const HeaderTitle = styled.h2`
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 1px;
 `;
-
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 12px;
 `;
-
-const ContainerRight = styled.div``;
 
 export default GlobalHeader;

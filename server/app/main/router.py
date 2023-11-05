@@ -3,6 +3,10 @@ import uvicorn
 from app.main.researches.controllers import router as researches_router
 from fastapi import FastAPI
 from .middlware.log_middleware import LogMiddleware
+from .infrastructure.db.database import engine
+from .infrastructure import models
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 app.add_middleware(LogMiddleware)
