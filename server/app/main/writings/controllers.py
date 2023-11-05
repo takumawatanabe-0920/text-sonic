@@ -1,12 +1,12 @@
 from email import message
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from server.app.main.writings.dto.request_dto import (
+from app.main.writings.dto.request_dto import (
     CreateWritingBodyDto,
     UpdateWritingBodyDto,
 )
 
-from server.app.main.writings.services import WritingService
+from app.main.writings.services import WritingService
 from .dto.response_dto import StatusResponse, WritingsResponse, WritingResponse
 
 router = APIRouter()

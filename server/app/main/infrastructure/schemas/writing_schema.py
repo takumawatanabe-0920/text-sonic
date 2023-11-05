@@ -10,11 +10,16 @@ class WritingBase(BaseModel):
 
 
 class WritingGet(BaseModel):
-    id: Column[int]
-    title: Column[str]
-    description: Column[str]
-    created_at: Column[datetime]
-    updated_at: Column[datetime]
+    # id: Column[int]
+    # title: Column[str]
+    # description: Column[str]
+    # created_at: Column[datetime]
+    # updated_at: Column[datetime]
+    id: int
+    title: str
+    description: str
+    created_at: str
+    updated_at: str
 
     class Config:
         orm_mode = True

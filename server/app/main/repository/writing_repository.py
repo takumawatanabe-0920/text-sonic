@@ -2,8 +2,8 @@ from MySQLdb import DatabaseError
 from sqlalchemy import Column
 from sqlalchemy.orm import Session
 from infrastructure import models
-from server.app.main.infrastructure.db.database import get_session
-from server.app.main.infrastructure.schemas.writing_schema import (
+from app.main.infrastructure.db.database import get_session
+from app.main.infrastructure.schemas.writing_schema import (
     WritingCreate,
     WritingGet,
     WritingUpdate,
