@@ -2,10 +2,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.main.writings.controllers import router as writing_router
 from fastapi import FastAPI
 from .middlware.log_middleware import LogMiddleware
-from .infrastructure.db.database import get_engine
-from .infrastructure import models
-
-models.Base.metadata.create_all(bind=get_engine())
+from app.main.infrastructure.prisma_service import prisma
 
 app = FastAPI()
 app.add_middleware(LogMiddleware)
@@ -22,3 +19,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(writing_router)
+
+
+@app.on_event("startup")
+async def startup():
+    await prisma.connect()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await prisma.disconnect()

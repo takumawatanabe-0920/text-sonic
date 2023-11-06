@@ -1,15 +1,14 @@
 from datetime import datetime
 from typing import List, Union
 from pydantic import BaseModel
-from sqlalchemy import Column
 
 
 class WritingDto(BaseModel):
     id: str
     title: str
     description: str
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
 
 
 class WritingsResponse(BaseModel):

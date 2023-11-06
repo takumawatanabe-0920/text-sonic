@@ -8,8 +8,7 @@ from typing import List, Optional
 from app.main.writings.dto.request_dto import CreateWritingBodyDto
 from app.main.writings.dto.request_dto import UpdateWritingBodyDto
 from app.main.repository.writing_repository import (
-    BaseWritingRepository,
-    create_writing_repository,
+    WritingRepository,
 )
 from app.main.writings.dto.response_dto import (
     StatusResponse,
@@ -23,16 +22,16 @@ from app.core.log.logger import logger
 class WritingService:
     def __init__(
         self,
-        writing_repository: BaseWritingRepository = Depends(create_writing_repository),
+        writing_repository: WritingRepository = Depends(WritingRepository),
     ):
         self.__writing_repository = writing_repository
 
-    def get_writings(self) -> WritingsResponse:
-        writings = self.__writing_repository.get_all()
+    async def get_writings(self) -> WritingsResponse:
+        writings = await self.__writing_repository.get_all()
         return self.__convert_list_response(writings)
 
-    def get_writing_by_id(self, id: str) -> WritingResponse:
-        writing = self.__writing_repository.get_by_id(id)
+    async def get_writing_by_id(self, id: str) -> WritingResponse:
+        writing = await self.__writing_repository.get_by_id(id)
         if not writing:
             return WritingResponse(message=None)
 
@@ -46,29 +45,30 @@ class WritingService:
             )
         )
 
-    def create_writing(self, writing: CreateWritingBodyDto) -> StatusResponse:
-        try:
-            self.__writing_repository.save(
-                WritingCreate(title=writing.title, description=writing.description)
-            )
-            return StatusResponse(message="OK")
-        except Exception as e:
-            logger.error(e)
-            return StatusResponse(message="NG")
+    async def create_writing(self, writing: CreateWritingBodyDto) -> WritingResponse:
+        created_writing = await self.__writing_repository.save(
+            WritingCreate(title=writing.title, description=writing.description)
+        )
+        if not created_writing:
+            return WritingResponse(message=None)
 
-    def update_writing(self, id: str, writing: UpdateWritingBodyDto) -> StatusResponse:
-        try:
-            self.__writing_repository.update(
-                id, WritingUpdate(title=writing.title, description=writing.description)
-            )
-            return StatusResponse(message="OK")
-        except Exception as e:
-            logger.error(e)
-            return StatusResponse(message="NG")
+        return await self.get_writing_by_id(created_writing.id)
 
-    def delete_writing(self, id: str) -> StatusResponse:
+    async def update_writing(
+        self, id: str, writing: UpdateWritingBodyDto
+    ) -> WritingResponse:
+        updated_writing = await self.__writing_repository.update(
+            id, WritingUpdate(title=writing.title, description=writing.description)
+        )
+
+        if not updated_writing:
+            return WritingResponse(message=None)
+
+        return await self.get_writing_by_id(id)
+
+    async def delete_writing(self, id: str) -> StatusResponse:
         try:
-            self.__writing_repository.delete(id)
+            await self.__writing_repository.delete(id)
             return StatusResponse(message="OK")
         except Exception as e:
             logger.error(e)

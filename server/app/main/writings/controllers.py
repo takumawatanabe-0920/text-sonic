@@ -12,38 +12,38 @@ router = APIRouter()
 
 
 @router.get("/writings", response_model=WritingsResponse)
-def get_writings(
+async def get_writings(
     writing_service: Annotated[WritingService, Depends(WritingService)]
 ) -> WritingsResponse:
-    return writing_service.get_writings()
+    return await writing_service.get_writings()
 
 
 @router.get("/writings/{id}", response_model=WritingResponse)
-def get_writing_by_id(
+async def get_writing_by_id(
     id: str, writing_service: Annotated[WritingService, Depends(WritingService)]
 ) -> WritingResponse:
-    return writing_service.get_writing_by_id(id)
+    return await writing_service.get_writing_by_id(id)
 
 
 @router.post("/writings", response_model=StatusResponse)
-def create_writing(
+async def create_writing(
     reqBody: CreateWritingBodyDto,
     writing_service: Annotated[WritingService, Depends(WritingService)],
-) -> StatusResponse:
-    return writing_service.create_writing(reqBody)
+) -> WritingResponse:
+    return await writing_service.create_writing(reqBody)
 
 
 @router.put("/writings/{id}", response_model=StatusResponse)
-def update_writing(
+async def update_writing(
     id: str,
     reqBody: UpdateWritingBodyDto,
     writing_service: Annotated[WritingService, Depends(WritingService)],
-) -> StatusResponse:
-    return writing_service.update_writing(id, reqBody)
+) -> WritingResponse:
+    return await writing_service.update_writing(id, reqBody)
 
 
 @router.delete("/writings/{id}")
-def delete_writing(
+async def delete_writing(
     id: str, writing_service: Annotated[WritingService, Depends(WritingService)]
 ) -> StatusResponse:
-    return writing_service.delete_writing(id)
+    return await writing_service.delete_writing(id)

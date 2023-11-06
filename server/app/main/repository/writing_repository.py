@@ -1,132 +1,86 @@
-from MySQLdb import DatabaseError
-from sqlalchemy.orm import Session
-from app.main.infrastructure.db.database import get_session
 from app.main.infrastructure.schemas.writing_schema import (
     WritingCreate,
     WritingGet,
     WritingUpdate,
 )
-from app.main.infrastructure import models
-from typing import Iterator, List, Optional
+from app.main.infrastructure.prisma_service import prisma
+from typing import List, Optional
+from prisma.types import WritingUpdateInput
 
 
-class BaseWritingRepository:
-    def __enter__(self):
-        return self
+class WritingRepository:
+    async def save(self, writing: WritingCreate) -> Optional[WritingGet]:
+        created_writing = await prisma.writing.create(
+            {
+                "title": writing.title,
+                "description": writing.description,
+            }
+        )
 
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        pass
+        return WritingGet(
+            id=created_writing.id,
+            title=created_writing.title,
+            description=created_writing.description,
+            created_at=created_writing.created_at,
+            updated_at=created_writing.updated_at,
+        )
 
-    def save(self, writing: WritingCreate) -> None:
-        raise NotImplementedError()
+    async def get_by_id(self, id: str) -> Optional[WritingGet]:
+        writing = await prisma.writing.find_unique(where={"id": id})
 
-    def get_by_id(self, id: str) -> Optional[WritingGet]:
-        raise NotImplementedError()
+        if not writing:
+            return None
 
-    def get_all(self) -> List[WritingGet]:
-        raise NotImplementedError()
+        return WritingGet(
+            id=writing.id,
+            title=writing.title,
+            description=writing.description,
+            created_at=writing.created_at,
+            updated_at=writing.updated_at,
+        )
 
-    def update(self, id: str, writing: WritingUpdate) -> None:
-        raise NotImplementedError()
+    async def get_all(self) -> List[WritingGet]:
+        writings = await prisma.writing.find_many()
 
-    def delete(self, id: str) -> None:
-        raise NotImplementedError()
-
-
-# SQLAlchemy Implementation of interface
-class SQLWritingRepository(BaseWritingRepository):
-    def __init__(self, session):
-        self._session: Session = session
-
-    def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
-        if any([exc_type, exc_value, exc_traceback]):
-            self._session.rollback()
-
-        try:
-            self._session.commit()
-        except DatabaseError:
-            self._session.rollback()
-            raise
-
-    def get_all(self) -> List[WritingGet]:
-        query = self._session.query(models.WritingInDB)
         return [
             WritingGet(
-                id=str(writing.id),
-                title=str(writing.title),
-                description=str(writing.description),
-                created_at=str(writing.created_at),
-                updated_at=str(writing.updated_at),
+                id=writing.id,
+                title=writing.title,
+                description=writing.description,
+                created_at=writing.created_at,
+                updated_at=writing.updated_at,
             )
-            for writing in query
+            for writing in writings
         ]
 
-    def get_by_id(self, id: str) -> Optional[WritingGet]:
-        writing = (
-            self._session.query(models.WritingInDB)
-            .filter(models.WritingInDB.id == id)
-            .first()
+    async def update(self, id: str, writing: WritingUpdate) -> Optional[WritingGet]:
+        data: WritingUpdateInput = {}
+        title = writing.title
+        description = writing.description
+
+        if title is not None:
+            data["title"] = title
+
+        if description is not None:
+            data["description"] = description
+
+        updated_writing = await prisma.writing.update(
+            where={"id": id},
+            data=data,
         )
-        if writing:
-            return WritingGet(
-                id=str(writing.id),
-                title=str(writing.title),
-                description=str(writing.description),
-                created_at=str(writing.created_at),
-                updated_at=str(writing.updated_at),
-            )
+
+        if not updated_writing:
+            return None
+
+        return WritingGet(
+            id=updated_writing.id,
+            title=updated_writing.title,
+            description=updated_writing.description,
+            created_at=updated_writing.created_at,
+            updated_at=updated_writing.updated_at,
+        )
+
+    async def delete(self, id: str) -> None:
+        await prisma.writing.delete(where={"id": id})
 
         return None
-
-    def save(self, writing: WritingCreate) -> Optional[models.WritingInDB]:
-        print(writing)
-        writing = models.WritingInDB(
-            title=writing.title, description=writing.description
-        )
-        print(writing)
-        self._session.add(
-            writing,
-        )
-        self._session.commit()
-        self._session.refresh(writing)
-
-        return None
-
-    def update(self, id: str, writing: WritingUpdate) -> Optional[models.WritingInDB]:
-        instance = (
-            self._session.query(models.WritingInDB)
-            .filter(models.WritingInDB.id == id)
-            .first()
-        )
-        if instance:
-            instance.title = writing.title  # type: ignore
-            instance.description = writing.description  # type: ignore
-
-            self._session.commit()
-            self._session.refresh(writing)
-
-        return None
-
-    def delete(self, id: str) -> None:
-        instance = (
-            self._session.query(models.WritingInDB)
-            .filter(models.WritingInDB.id == id)
-            .first()
-        )
-        if instance:
-            self._session.delete(instance)
-
-        return None
-
-
-def create_writing_repository() -> Iterator[BaseWritingRepository]:
-    session = get_session()()
-    writing_repository = SQLWritingRepository(session)
-
-    try:
-        yield writing_repository
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()

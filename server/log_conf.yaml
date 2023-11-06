@@ -19,10 +19,6 @@ handlers:
     formatter: access
     class: logging.FileHandler
     filename: access.log
-  sqlhandler:
-    formatter: sqlformatter
-    class: logging.FileHandler
-    filename: sqlalchemy.log
 
 loggers:
   uvicorn:
@@ -34,11 +30,6 @@ loggers:
     level: INFO
     handlers:
       - access_file
-    propagate: no
-  sqlalchemy.engine:
-    level: DEBUG
-    handlers:
-      - sqlhandler
     propagate: no
 
 root:

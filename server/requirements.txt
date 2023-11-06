@@ -2,10 +2,10 @@ fastapi
 uvicorn
 arel
 Pydantic<2.0.0
-sqlalchemy
 pymysql
 psycopg2-binary
 python-dotenv
 cryptography
 PyYAML>=6.0
 colorlog
+prisma
