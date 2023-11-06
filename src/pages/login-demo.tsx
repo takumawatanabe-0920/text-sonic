@@ -1,10 +1,9 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const clientId =
   '658478798216-td0kduh6um8appipkc7psv799d8kmplt.apps.googleusercontent.com';
 const redirectUri = 'http://localhost:3016/login-demo'; // 例として localhost を使用
-
-const axios = require('axios');
 
 async function getUserInfo(accessToken: string) {
   const url =
@@ -21,10 +20,13 @@ async function getUserInfo(accessToken: string) {
 }
 
 function Login() {
-  const [userInfo, setUserInfo] = useState(null); // [1
+  const [userInfo, setUserInfo] = useState<{
+    name: string;
+    email: string;
+    picture: string;
+  }>(); // [1
   const handleClick = () => {
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&response_type=token&scope=openid%20profile%20email&redirect_uri=${redirectUri}`;
-    console.log({ url });
     window.location.href = url;
   };
 
@@ -51,11 +53,7 @@ function Login() {
           <h2>Logged in!</h2>
           <p>{userInfo.name}</p>
           <p>{userInfo.email}</p>
-          <p>{userInfo.picture}</p>
-          <img
-            src="https://lh3.googleusercontent.com/a/ACg8ocLmDoG-TAu0FBZ8yzCP7Rzv_JRiWsMHMicik-t37Glpv4I=s96-c"
-            alt="代替テキスト"
-          />
+          <img src={userInfo.picture} alt="代替テキスト" />
         </div>
       ) : (
         <button onClick={handleClick}>Google Login</button>
