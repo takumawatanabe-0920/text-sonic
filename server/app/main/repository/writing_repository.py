@@ -53,11 +53,11 @@ class SQLWritingRepository(BaseWritingRepository):
         query = self._session.query(models.WritingInDB)
         return [
             WritingGet(
-                id=writing.id,
-                title=writing.title,
-                description=writing.description,
-                created_at=writing.created_at,
-                updated_at=writing.updated_at,
+                id=int(writing.id),  # type: ignore
+                title=str(writing.title),
+                description=str(writing.description),
+                created_at=str(writing.created_at),
+                updated_at=str(writing.updated_at),
             )
             for writing in query
         ]
@@ -70,11 +70,11 @@ class SQLWritingRepository(BaseWritingRepository):
         )
         if writing:
             return WritingGet(
-                id=writing.id,
-                title=writing.title,
-                description=writing.description,
-                created_at=writing.created_at,
-                updated_at=writing.updated_at,
+                id=int(writing.id),  # type: ignore
+                title=str(writing.title),
+                description=str(writing.description),
+                created_at=str(writing.created_at),
+                updated_at=str(writing.updated_at),
             )
 
         return None
