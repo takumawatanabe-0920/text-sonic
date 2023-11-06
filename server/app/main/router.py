@@ -1,5 +1,4 @@
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 from app.main.writings.controllers import router as writing_router
 from fastapi import FastAPI
 from .middlware.log_middleware import LogMiddleware

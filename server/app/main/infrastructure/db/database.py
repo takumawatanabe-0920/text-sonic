@@ -11,7 +11,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 @lru_cache(maxsize=None)
 def get_engine():
-    return create_engine(DATABASE_URL, pool_pre_ping=True)
+    return create_engine(DATABASE_URL, pool_pre_ping=True, echo=True)
 
 
 def get_session():

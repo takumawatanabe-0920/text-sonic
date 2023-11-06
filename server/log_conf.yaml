@@ -7,6 +7,9 @@ formatters:
   access:
     (): colorlog.ColoredFormatter
     format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  sqlformatter:
+    format: '%(asctime)s [SQL] %(message)s'
+
 handlers:
   default:
     formatter: default
@@ -16,6 +19,11 @@ handlers:
     formatter: access
     class: logging.FileHandler
     filename: access.log
+  sqlhandler:
+    formatter: sqlformatter
+    class: logging.FileHandler
+    filename: sqlalchemy.log
+
 loggers:
   uvicorn:
     level: INFO
@@ -27,6 +35,12 @@ loggers:
     handlers:
       - access_file
     propagate: no
+  sqlalchemy.engine:
+    level: DEBUG
+    handlers:
+      - sqlhandler
+    propagate: no
+
 root:
   level: DEBUG
   handlers:
