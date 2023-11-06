@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 const clientId =
   '658478798216-td0kduh6um8appipkc7psv799d8kmplt.apps.googleusercontent.com';
-const redirectUri = 'http://localhost:3016/login-demo'; // 例として localhost を使用
+const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI; // 例として localhost を使用
 
 async function getUserInfo(accessToken: string) {
   const url =
