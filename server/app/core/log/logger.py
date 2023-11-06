@@ -24,5 +24,3 @@ handler = logging.StreamHandler()
 handler.setFormatter(JsonFormatter())
 logger.handlers = [handler]
 logger.setLevel(logging.DEBUG)
-
-logging.getLogger("uvicorn.access").disabled = True

@@ -1,5 +1,4 @@
 from MySQLdb import DatabaseError
-from sqlalchemy import Column
 from sqlalchemy.orm import Session
 from app.main.infrastructure.db.database import get_session
 from app.main.infrastructure.schemas.writing_schema import (
@@ -80,12 +79,16 @@ class SQLWritingRepository(BaseWritingRepository):
         return None
 
     def save(self, writing: WritingCreate) -> Optional[models.WritingInDB]:
+        print(writing)
         writing = models.WritingInDB(
             title=writing.title, description=writing.description
         )
+        print(writing)
         self._session.add(
             writing,
         )
+        self._session.commit()
+        self._session.refresh(writing)
 
         return None
 
@@ -96,9 +99,11 @@ class SQLWritingRepository(BaseWritingRepository):
             .first()
         )
         if instance:
-            writing_data = writing.dict(exclude_unset=True)
-            for key, value in writing_data.items():
-                setattr(instance, key, value)
+            instance.title = writing.title  # type: ignore
+            instance.description = writing.description  # type: ignore
+
+            self._session.commit()
+            self._session.refresh(writing)
 
         return None
 
