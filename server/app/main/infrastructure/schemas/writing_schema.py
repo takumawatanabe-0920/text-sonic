@@ -1,7 +1,5 @@
-from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
-from sqlalchemy import Column
 
 
 class WritingBase(BaseModel):
@@ -10,7 +8,7 @@ class WritingBase(BaseModel):
 
 
 class WritingGet(BaseModel):
-    id: int
+    id: str
     title: str
     description: str
     created_at: str

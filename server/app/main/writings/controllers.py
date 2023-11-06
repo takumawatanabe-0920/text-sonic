@@ -20,7 +20,7 @@ def get_writings(
 
 @router.get("/writings/{id}", response_model=WritingResponse)
 def get_writing_by_id(
-    id: int, writing_service: Annotated[WritingService, Depends(WritingService)]
+    id: str, writing_service: Annotated[WritingService, Depends(WritingService)]
 ) -> WritingResponse:
     return writing_service.get_writing_by_id(id)
 
@@ -35,7 +35,7 @@ def create_writing(
 
 @router.put("/writings/{id}", response_model=StatusResponse)
 def update_writing(
-    id: int,
+    id: str,
     reqBody: UpdateWritingBodyDto,
     writing_service: Annotated[WritingService, Depends(WritingService)],
 ) -> StatusResponse:
@@ -44,6 +44,6 @@ def update_writing(
 
 @router.delete("/writings/{id}")
 def delete_writing(
-    id: int, writing_service: Annotated[WritingService, Depends(WritingService)]
+    id: str, writing_service: Annotated[WritingService, Depends(WritingService)]
 ) -> StatusResponse:
     return writing_service.delete_writing(id)

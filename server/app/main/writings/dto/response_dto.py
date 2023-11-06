@@ -5,7 +5,7 @@ from sqlalchemy import Column
 
 
 class WritingDto(BaseModel):
-    id: int
+    id: str
     title: str
     description: str
     created_at: str

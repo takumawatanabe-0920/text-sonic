@@ -31,7 +31,7 @@ class WritingService:
         writings = self.__writing_repository.get_all()
         return self.__convert_list_response(writings)
 
-    def get_writing_by_id(self, id: int) -> WritingResponse:
+    def get_writing_by_id(self, id: str) -> WritingResponse:
         writing = self.__writing_repository.get_by_id(id)
         if not writing:
             return WritingResponse(message=None)
@@ -56,7 +56,7 @@ class WritingService:
             logger.error(e)
             return StatusResponse(message="NG")
 
-    def update_writing(self, id: int, writing: UpdateWritingBodyDto) -> StatusResponse:
+    def update_writing(self, id: str, writing: UpdateWritingBodyDto) -> StatusResponse:
         try:
             self.__writing_repository.update(
                 id, WritingUpdate(title=writing.title, description=writing.description)
@@ -66,7 +66,7 @@ class WritingService:
             logger.error(e)
             return StatusResponse(message="NG")
 
-    def delete_writing(self, id: int) -> StatusResponse:
+    def delete_writing(self, id: str) -> StatusResponse:
         try:
             self.__writing_repository.delete(id)
             return StatusResponse(message="OK")

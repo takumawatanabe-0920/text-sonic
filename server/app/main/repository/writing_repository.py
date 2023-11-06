@@ -20,16 +20,16 @@ class BaseWritingRepository:
     def save(self, writing: WritingCreate) -> None:
         raise NotImplementedError()
 
-    def get_by_id(self, id: int) -> Optional[WritingGet]:
+    def get_by_id(self, id: str) -> Optional[WritingGet]:
         raise NotImplementedError()
 
     def get_all(self) -> List[WritingGet]:
         raise NotImplementedError()
 
-    def update(self, id: int, writing: WritingUpdate) -> None:
+    def update(self, id: str, writing: WritingUpdate) -> None:
         raise NotImplementedError()
 
-    def delete(self, id: int) -> None:
+    def delete(self, id: str) -> None:
         raise NotImplementedError()
 
 
@@ -52,7 +52,7 @@ class SQLWritingRepository(BaseWritingRepository):
         query = self._session.query(models.WritingInDB)
         return [
             WritingGet(
-                id=int(writing.id),  # type: ignore
+                id=str(writing.id),
                 title=str(writing.title),
                 description=str(writing.description),
                 created_at=str(writing.created_at),
@@ -61,7 +61,7 @@ class SQLWritingRepository(BaseWritingRepository):
             for writing in query
         ]
 
-    def get_by_id(self, id: int) -> Optional[WritingGet]:
+    def get_by_id(self, id: str) -> Optional[WritingGet]:
         writing = (
             self._session.query(models.WritingInDB)
             .filter(models.WritingInDB.id == id)
@@ -69,7 +69,7 @@ class SQLWritingRepository(BaseWritingRepository):
         )
         if writing:
             return WritingGet(
-                id=int(writing.id),  # type: ignore
+                id=str(writing.id),
                 title=str(writing.title),
                 description=str(writing.description),
                 created_at=str(writing.created_at),
@@ -92,7 +92,7 @@ class SQLWritingRepository(BaseWritingRepository):
 
         return None
 
-    def update(self, id: int, writing: WritingUpdate) -> Optional[models.WritingInDB]:
+    def update(self, id: str, writing: WritingUpdate) -> Optional[models.WritingInDB]:
         instance = (
             self._session.query(models.WritingInDB)
             .filter(models.WritingInDB.id == id)
@@ -107,7 +107,7 @@ class SQLWritingRepository(BaseWritingRepository):
 
         return None
 
-    def delete(self, id: int) -> None:
+    def delete(self, id: str) -> None:
         instance = (
             self._session.query(models.WritingInDB)
             .filter(models.WritingInDB.id == id)
