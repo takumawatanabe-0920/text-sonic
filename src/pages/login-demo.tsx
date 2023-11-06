@@ -27,6 +27,7 @@ function Login() {
   }>(); // [1
   const handleClick = () => {
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&response_type=token&scope=openid%20profile%20email&redirect_uri=${redirectUri}`;
+    console.log({ url, redirectUri });
     window.location.href = url;
   };
 
