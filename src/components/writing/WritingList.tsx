@@ -2,6 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Button,
+  Divider,
   Grid,
   IconButton,
   List,
@@ -9,7 +10,9 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from '@mui/material';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import WritingDialog from '~/components/writing/WritingDialog';
 
 type WritingListProps = {
   writings: {
@@ -20,14 +23,19 @@ type WritingListProps = {
 
 const WritingList: React.FC<WritingListProps> = (props) => {
   const { writings } = props;
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
       <WritingListWrapper container spacing={3}>
-        <nav aria-label="secondary mailbox folders">
-          <List>
-            {writings.map((item, index) => (
-              <ListItem key={index}>
+        <CustomList>
+          <HR />
+          {writings.map((item, index) => (
+            <React.Fragment key={index}>
+              <CustomListItem disablePadding>
                 <ListItemText primary={item.title} />
                 <ListItemSecondaryAction>
                   <IconButton
@@ -38,32 +46,62 @@ const WritingList: React.FC<WritingListProps> = (props) => {
                     <DeleteIcon />
                   </IconButton>
                   {/* update */}
-                  <IconButton edge="end" aria-label="delete">
+                  <IconButton
+                    edge="end"
+                    aria-label="update"
+                    onClick={handleOpen}
+                  >
                     <EditIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
-        </nav>
+              </CustomListItem>
+              <HR />
+            </React.Fragment>
+          ))}
+        </CustomList>
       </WritingListWrapper>
-      <WritingButton variant="contained">Create New</WritingButton>
+      <WritingButton variant="contained" onClick={handleOpen}>
+        Create New
+      </WritingButton>
+      <WritingDialog
+        open={open}
+        handleClose={handleClose}
+        handleOpen={handleOpen}
+      />
     </>
   );
 };
 
 const WritingListWrapper = styled(Grid)`
   margin-top: 20px;
+  width: 100%;
 `;
 
 const WritingButton = styled(Button)`
-  margin: 10px;
+  margin: 10px 0;
   color: white;
   background-color: #3f51b5;
 
   &:hover {
     background-color: #4660d9;
   }
+`;
+
+const CustomList = styled(List)`
+  padding-left: 30px;
+  width: 100%;
+`;
+
+const CustomListItem = styled(ListItem)`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const HR = styled(Divider)`
+  margin: 10px 0;
 `;
 
 export default WritingList;

@@ -1,4 +1,3 @@
-import { Button, Grid } from '@mui/material';
 import { GetServerSideProps, NextPage } from 'next';
 import styled from 'styled-components';
 import Container from '~/components/parts/common/Container';
@@ -40,20 +39,6 @@ const StyledContainer = styled(Container)`
   justify-content: center;
 `;
 
-const DailyList = styled(Grid)`
-  margin-top: 20px;
-`;
-
-const DailyButton = styled(Button)`
-  margin: 10px;
-  color: white;
-  background-color: #3f51b5;
-
-  &:hover {
-    background-color: #4660d9;
-  }
-`;
-
 const Title = styled.h2`
   font-size: 24px;
   font-weight: bold;
@@ -67,38 +52,6 @@ const ContentSection = styled.div`
 export const getServerSideProps: GetServerSideProps = async () => {
   // Fetch your dailies from the database here.
   const dailies = [
-    {
-      title: 'Writing 1',
-      content: 'This is the first writing.',
-    },
-    {
-      title: 'Writing 2',
-      content: 'This is the second writing.',
-    },
-    {
-      title: 'Writing 1',
-      content: 'This is the first writing.',
-    },
-    {
-      title: 'Writing 2',
-      content: 'This is the second writing.',
-    },
-    {
-      title: 'Writing 1',
-      content: 'This is the first writing.',
-    },
-    {
-      title: 'Writing 2',
-      content: 'This is the second writing.',
-    },
-    {
-      title: 'Writing 1',
-      content: 'This is the first writing.',
-    },
-    {
-      title: 'Writing 2',
-      content: 'This is the second writing.',
-    },
     {
       title: 'Writing 1',
       content: 'This is the first writing.',
