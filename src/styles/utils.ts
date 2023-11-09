@@ -72,6 +72,8 @@ export const color = {
   BLACK_800: '#414143',
   BLACK_900: '#222222',
   GREEN: '#A5E259',
+  BLUE: '#03a9f4',
+  BLACK: '#424242',
   font: {
     PRIMARY: '#3D1593',
     MAIN: '#050505',
