@@ -2,6 +2,7 @@ import { Dialog } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { LoginForm } from '~/components/login/LoginForm';
+import toastMessage from '~/components/parts/toast/ToastMessage';
 import { useUser } from '~/hooks/api/user';
 import { getCurrentUser, loginByEmail } from '~/lib/api/user';
 
@@ -43,8 +44,16 @@ const LoginDialog: React.FC<LoginDialogProps> = (props) => {
       if (afterLoginAction) {
         afterLoginAction();
       }
+      toastMessage({
+        type: 'success',
+        message: 'success to login.',
+      });
     } catch (e) {
-      alert('Login failed. Please check your email and password.');
+      console.error(e);
+      toastMessage({
+        type: 'error',
+        message: 'failed to login.',
+      });
     }
   });
 

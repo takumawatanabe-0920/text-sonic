@@ -1,6 +1,7 @@
 import { Dialog } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import toastMessage from '~/components/parts/toast/ToastMessage';
 import { SignUpForm } from '~/components/signUp/SignUpForm';
 import { useUser } from '~/hooks/api/user';
 import { getCurrentUser, signUpByEmail } from '~/lib/api/user';
@@ -43,8 +44,16 @@ const SignUpDialog: React.FC<SignUpDialogProps> = (props) => {
       if (afterSignUpAction) {
         afterSignUpAction();
       }
+      toastMessage({
+        type: 'success',
+        message: 'success to sign up.',
+      });
     } catch (e) {
-      alert('SignUp failed. Please check your email and password.');
+      console.error(e);
+      toastMessage({
+        type: 'error',
+        message: 'failed to sign up.',
+      });
     }
   });
 

@@ -52,7 +52,7 @@ export async function loginByEmail({
   return;
 }
 
-export async function logout() {
+export function logout() {
   storageClient.remove('token');
   return;
 }
