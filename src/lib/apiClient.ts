@@ -1,16 +1,19 @@
 import pickQueryParams from '~/lib/pickQueryParams';
+import { storageClient } from '~/lib/storage';
 
 const SERVER_ROOT = process.env.NEXT_PUBLIC_API_HOST_KEY || '';
 
 async function get(path: string, params: Record<string, any> = {}) {
   const queryParams = pickQueryParams(params);
   const isEmpty = queryParams.toString() === '';
+  const token = storageClient.get('token');
   const response = await fetch(
     // eslint-disable-next-line
     `${SERVER_ROOT}${path}${isEmpty ? '' : `?${queryParams}`}`,
     {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       mode: 'cors',
@@ -26,10 +29,12 @@ async function get(path: string, params: Record<string, any> = {}) {
 }
 
 async function otherMethods(method: string, endpoint: string, data: any) {
+  const token = storageClient.get('token');
   const response = await fetch(`${SERVER_ROOT}${endpoint}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     credentials: 'include',
     mode: 'cors',
