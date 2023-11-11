@@ -41,17 +41,22 @@ export async function updateWriting({
   return (await res.json()).message;
 }
 
-export async function getWritings(): Promise<{
-  items: Writing[];
-  total: number;
-}> {
-  const res = await ApiClient.get(`/writings`);
-  const writings: Writing[] = (await res.json()) || [];
-
-  return {
-    items: writings,
-    total: writings.length,
-  };
+export async function getWritings({
+  userId,
+}: {
+  userId?: string | undefined;
+}): Promise<Writing[]> {
+  if (!userId) {
+    return [];
+  }
+  try {
+    const res = await ApiClient.get(`/writings`, { user_id: userId });
+    const writings: Writing[] = (await res.json()).message || [];
+    return writings;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 }
 
 export async function getWriting({

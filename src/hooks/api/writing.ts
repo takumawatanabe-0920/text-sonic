@@ -1,10 +1,10 @@
 import useSWR from 'swr';
 import { getWriting, getWritings } from '~/lib/api/writing';
 
-export function useWritings() {
+export function useWritings({ userId }: { userId?: string }) {
   const { data, isLoading, mutate, isValidating } = useSWR(
     'getWritings',
-    async () => getWritings(),
+    async () => getWritings({ userId }),
   );
   const writings = data || [];
 

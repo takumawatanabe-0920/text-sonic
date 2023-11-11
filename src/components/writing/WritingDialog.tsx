@@ -1,18 +1,37 @@
 import { Button, Dialog, DialogTitle, TextField } from '@mui/material';
 import { useState } from 'react';
 import styled from 'styled-components';
+import toastMessage from '~/components/parts/toast/ToastMessage';
+import { createWriting } from '~/lib/api/writing';
 
 interface WritingDialogProps {
   open: boolean;
   handleClose: () => void;
-  handleOpen: () => void;
 }
 
 const WritingDialog: React.FC<WritingDialogProps> = (props) => {
-  const { open, handleClose, handleOpen } = props;
+  const { open, handleClose } = props;
 
   const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleCreateWriting = async () => {
+    try {
+      await createWriting({ title, description });
+      toastMessage({
+        type: 'success',
+        message: 'success to create writing.',
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      handleClose();
+      toastMessage({
+        type: 'error',
+        message: 'failed to create writing.',
+      });
+    }
+  };
 
   return (
     <Dialog
@@ -27,7 +46,7 @@ const WritingDialog: React.FC<WritingDialogProps> = (props) => {
           margin="dense"
           id="name"
           label="Title"
-          type="text"
+          type="description"
           fullWidth
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -36,17 +55,17 @@ const WritingDialog: React.FC<WritingDialogProps> = (props) => {
           margin="dense"
           id="description"
           label="Description"
-          type="text"
+          type="textarea"
           fullWidth
           multiline
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <ButtonsContainer>
           <Button color="error" onClick={handleClose}>
             Cancel
           </Button>
-          <Button color="primary" onClick={handleOpen}>
+          <Button color="primary" onClick={handleCreateWriting}>
             Submit
           </Button>
         </ButtonsContainer>

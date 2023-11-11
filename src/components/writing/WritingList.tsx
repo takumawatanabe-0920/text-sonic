@@ -15,12 +15,10 @@ import styled from 'styled-components';
 import LoginManager from '~/components/login/LoginManager';
 import WritingDialog from '~/components/writing/WritingDialog';
 import { useUser } from '~/hooks/api/user';
+import { Writing } from '~/lib/api/writing';
 
 type WritingListProps = {
-  writings: {
-    title: string;
-    content: string;
-  }[];
+  writings: Writing[];
 };
 
 const WritingList: React.FC<WritingListProps> = (props) => {
@@ -90,11 +88,7 @@ const WritingList: React.FC<WritingListProps> = (props) => {
         afterSignUpAction={afterSignUpAction}
         isRequiredAuth={isRequiredAuth}
       />
-      <WritingDialog
-        open={open}
-        handleClose={handleClose}
-        handleOpen={handleOpen}
-      />
+      <WritingDialog open={open} handleClose={handleClose} />
     </>
   );
 };
