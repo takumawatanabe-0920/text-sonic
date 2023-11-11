@@ -13,9 +13,11 @@ import {
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import LoginManager from '~/components/login/LoginManager';
-import WritingDialog from '~/components/writing/WritingDialog';
+import toastMessage from '~/components/parts/toast/ToastMessage';
+import CreateWritingDialog from '~/components/writing/CreateWritingDialog';
+import UpdateWritingDialog from '~/components/writing/UpdateWritingDialog';
 import { useUser } from '~/hooks/api/user';
-import { Writing } from '~/lib/api/writing';
+import { Writing, deleteWriting } from '~/lib/api/writing';
 
 type WritingListProps = {
   writings: Writing[];
@@ -24,19 +26,35 @@ type WritingListProps = {
 const WritingList: React.FC<WritingListProps> = (props) => {
   const { writings } = props;
   const [open, setOpen] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
+  const [initialValue, setInitialValue] = useState<Writing>();
   const { user } = useUser({ isRequiredAuth });
 
-  const handleOpen = () => {
+  const handleCreateOpen = () => {
     setIsRequiredAuth(true);
+    setInitialValue(undefined);
     if (!user) {
       return;
     }
     setOpen(true);
   };
 
+  const handleUpdateOpen = (writing: Writing) => {
+    setIsRequiredAuth(true);
+    if (!user) {
+      return;
+    }
+    setInitialValue(writing);
+    setOpenUpdate(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleUpdateClose = () => {
+    setOpenUpdate(false);
   };
 
   const afterLoginAction = () => {
@@ -48,28 +66,45 @@ const WritingList: React.FC<WritingListProps> = (props) => {
     setOpen(true);
   };
 
+  const handleDeleteWriting = async (writingId: string) => {
+    try {
+      await deleteWriting({ id: writingId });
+      toastMessage({
+        type: 'error',
+        message: 'success to delete writing.',
+      });
+    } catch (e) {
+      console.error(e);
+      toastMessage({
+        type: 'error',
+        message: 'failed to delete writing.',
+      });
+    }
+  };
+
+  console.log({ initialValue });
+
   return (
     <>
       <WritingListWrapper container spacing={3}>
         <CustomList>
           <HR />
-          {writings.map((item, index) => (
+          {writings.map((writing, index) => (
             <React.Fragment key={index}>
               <CustomListItem disablePadding>
-                <ListItemText primary={item.title} />
+                <ListItemText primary={writing.title} />
                 <ListItemSecondaryAction>
                   <IconButton
                     edge="end"
                     aria-label="delete"
-                    // onClick={() => deleteItem(index)}
+                    onClick={() => handleDeleteWriting(writing.id)}
                   >
                     <DeleteIcon />
                   </IconButton>
-                  {/* update */}
                   <IconButton
                     edge="end"
                     aria-label="update"
-                    onClick={handleOpen}
+                    onClick={() => handleUpdateOpen(writing)}
                   >
                     <EditIcon />
                   </IconButton>
@@ -80,7 +115,7 @@ const WritingList: React.FC<WritingListProps> = (props) => {
           ))}
         </CustomList>
       </WritingListWrapper>
-      <WritingButton variant="contained" onClick={handleOpen}>
+      <WritingButton variant="contained" onClick={handleCreateOpen}>
         Create New
       </WritingButton>
       <LoginManager
@@ -88,7 +123,14 @@ const WritingList: React.FC<WritingListProps> = (props) => {
         afterSignUpAction={afterSignUpAction}
         isRequiredAuth={isRequiredAuth}
       />
-      <WritingDialog open={open} handleClose={handleClose} />
+      <CreateWritingDialog open={open} handleClose={handleClose} />
+      {initialValue && (
+        <UpdateWritingDialog
+          open={openUpdate}
+          handleClose={handleUpdateClose}
+          writing={initialValue}
+        />
+      )}
     </>
   );
 };

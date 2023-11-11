@@ -22,7 +22,7 @@ const Home: NextPage = () => {
 
     (async () => {
       const __writings = await getWritings({ userId: user.id });
-      await mutateWritings(__writings);
+      await mutateWritings(__writings, false);
     })();
   }, [user?.id, mutateWritings]);
 
