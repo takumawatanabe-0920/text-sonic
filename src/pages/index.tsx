@@ -1,5 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
+import { useState } from 'react';
 import styled from 'styled-components';
+import LoginDialog from '~/components/login/LoginDialog';
 import Container from '~/components/parts/common/Container';
 import Benefits from '~/components/writing/Benefits';
 import TopSection from '~/components/writing/TopSection';
@@ -13,6 +15,10 @@ const Home: NextPage<{
     content: string;
   }[];
 }> = ({ dailies }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <Layout>
       <TopSection />
@@ -22,6 +28,12 @@ const Home: NextPage<{
 
           <WritingList writings={dailies} />
         </ContentSection>
+
+        <LoginDialog
+          open={open}
+          handleClose={handleClose}
+          handleOpen={handleOpen}
+        />
 
         <ContentSection>
           <Title>Benefits of Using Our Service</Title>

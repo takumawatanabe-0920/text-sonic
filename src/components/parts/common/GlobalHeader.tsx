@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 import { color, zIndex } from '~/styles/utils';
 
@@ -11,7 +12,15 @@ const GlobalHeader = ({ rootRef }: PropsType): JSX.Element => {
     <Container ref={rootRef}>
       <ContainerLeft>
         <TitleContainer>
-          <HeaderTitle>Text Sonic</HeaderTitle>
+          <HeaderTitle>
+            <Link
+              href={{
+                pathname: '/',
+              }}
+            >
+              Text Sonic
+            </Link>
+          </HeaderTitle>
         </TitleContainer>
       </ContainerLeft>
     </Container>
