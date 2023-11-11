@@ -15,10 +15,17 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
   const headerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    console.log(
+      'headerRef',
+      headerRef.current,
+      headerRef.current?.clientHeight,
+    );
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.clientHeight);
     }
   }, [headerRef.current, headerRef.current?.clientHeight]);
+
+  console.log('headerHeight', headerHeight);
 
   return (
     <LayoutWrapper>
@@ -69,7 +76,7 @@ const BodyContainer = styled.div<{
   align-items: flex-start;
   padding-bottom: 10px;
 
-  padding-top: ${({ headerHeight }) => headerHeight || 0}px;
+  padding-top: ${({ headerHeight }) => headerHeight || '56'}px;
 `;
 
 export default Layout;

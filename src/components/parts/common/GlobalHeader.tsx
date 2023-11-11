@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import styled from 'styled-components';
 import LoginManager from '~/components/login/LoginManager';
 import toastMessage from '~/components/parts/toast/ToastMessage';
 import { useUser } from '~/hooks/api/user';
@@ -69,63 +70,67 @@ const GlobalHeader = ({ rootRef }: PropsType): JSX.Element => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" color="primary">
-        <Toolbar>
-          <Typography
-            variant="h5"
-            component="a"
-            sx={{ flexGrow: 1 }}
-            href={'/'}
-          >
-            Text Sonic
-          </Typography>
-          {user ? (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleLogout}>
-                  Logout {`(${user.email})`}
-                </MenuItem>
-              </Menu>
-            </div>
-          ) : (
-            <Button color="inherit" onClick={handleLoginOpen}>
-              Login
-            </Button>
-          )}
-        </Toolbar>
-      </AppBar>
-      <LoginManager
-        afterLoginAction={afterLoginAction}
-        afterSignUpAction={afterSignUpAction}
-        isRequiredAuth={isRequiredAuth}
-      />
-    </Box>
+    <StyledHeader ref={rootRef}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="fixed" color="primary">
+          <Toolbar>
+            <Typography
+              variant="h5"
+              component="a"
+              sx={{ flexGrow: 1 }}
+              href={'/'}
+            >
+              Text Sonic
+            </Typography>
+            {user ? (
+              <div>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleLogout}>
+                    Logout {`(${user.email})`}
+                  </MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              <Button color="inherit" onClick={handleLoginOpen}>
+                Login
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+        <LoginManager
+          afterLoginAction={afterLoginAction}
+          afterSignUpAction={afterSignUpAction}
+          isRequiredAuth={isRequiredAuth}
+        />
+      </Box>
+    </StyledHeader>
   );
 };
+
+const StyledHeader = styled.header``;
 
 export default GlobalHeader;
