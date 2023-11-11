@@ -13,7 +13,7 @@ import { useState } from 'react';
 import LoginManager from '~/components/login/LoginManager';
 import toastMessage from '~/components/parts/toast/ToastMessage';
 import { useUser } from '~/hooks/api/user';
-import { logout } from '~/lib/api/user';
+import { getCurrentUser, logout } from '~/lib/api/user';
 
 interface PropsType {
   headerTabs?: JSX.Element | undefined;
@@ -21,9 +21,11 @@ interface PropsType {
 }
 
 const GlobalHeader = ({ rootRef }: PropsType): JSX.Element => {
-  const { user, mutateUser } = useUser({ isRequiredAuth: false });
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
+  const { user, mutateUser, openLoginModalHandler } = useUser({
+    isRequiredAuth,
+  });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -40,6 +42,7 @@ const GlobalHeader = ({ rootRef }: PropsType): JSX.Element => {
         message: 'success to logout.',
       });
       logout();
+      await getCurrentUser();
       mutateUser(null);
     } catch (e) {
       console.error(e);

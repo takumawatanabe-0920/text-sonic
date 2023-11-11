@@ -61,7 +61,7 @@ const LoginDialog: React.FC<LoginDialogProps> = (props) => {
     if (user && !isLoading) {
       closeLoginModalHandler();
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, closeLoginModalHandler]);
 
   return (
     <Dialog open={openLoginModal}>

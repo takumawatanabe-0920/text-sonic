@@ -61,7 +61,7 @@ const SignUpDialog: React.FC<SignUpDialogProps> = (props) => {
     if (user && !isLoading) {
       closeSignUpModalHandler();
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, closeSignUpModalHandler]);
 
   return (
     <Dialog open={openSignUpModal}>

@@ -18,7 +18,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.clientHeight);
     }
-  }, [headerRef.current]);
+  }, [headerRef.current, headerRef.current?.clientHeight]);
 
   return (
     <LayoutWrapper>
