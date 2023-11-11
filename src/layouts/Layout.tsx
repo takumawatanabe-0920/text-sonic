@@ -18,7 +18,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.clientHeight);
     }
-  }, [headerRef.current]);
+  }, [headerRef.current, headerRef.current?.clientHeight]);
 
   return (
     <LayoutWrapper>
@@ -69,7 +69,7 @@ const BodyContainer = styled.div<{
   align-items: flex-start;
   padding-bottom: 10px;
 
-  padding-top: ${({ headerHeight }) => headerHeight || 0}px;
+  padding-top: ${({ headerHeight }) => headerHeight || '56'}px;
 `;
 
 export default Layout;

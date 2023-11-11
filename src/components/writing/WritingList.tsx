@@ -12,46 +12,105 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import WritingDialog from '~/components/writing/WritingDialog';
+import LoginManager from '~/components/login/LoginManager';
+import toastMessage from '~/components/parts/toast/ToastMessage';
+import CreateWritingDialog from '~/components/writing/CreateWritingDialog';
+import UpdateWritingDialog from '~/components/writing/UpdateWritingDialog';
+import { useUser } from '~/hooks/api/user';
+import { useWritings } from '~/hooks/api/writing';
+import { Writing, deleteWriting, getWritings } from '~/lib/api/writing';
 
 type WritingListProps = {
-  writings: {
-    title: string;
-    content: string;
-  }[];
+  writings: Writing[];
 };
 
 const WritingList: React.FC<WritingListProps> = (props) => {
   const { writings } = props;
   const [open, setOpen] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [isRequiredAuth, setIsRequiredAuth] = useState(false);
+  const [initialValue, setInitialValue] = useState<Writing>();
+  const { user } = useUser({ isRequiredAuth });
+  const { mutate: mutateWritings } = useWritings({});
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleCreateOpen = () => {
+    setIsRequiredAuth(true);
+    setInitialValue(undefined);
+    if (!user) {
+      return;
+    }
+    setOpen(true);
+  };
+
+  const handleUpdateOpen = (writing: Writing) => {
+    setIsRequiredAuth(true);
+    if (!user) {
+      return;
+    }
+    setInitialValue(writing);
+    setOpenUpdate(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleUpdateClose = () => {
+    setOpenUpdate(false);
+  };
+
+  const afterLoginAction = () => {
+    setIsRequiredAuth(false);
+    setOpen(true);
+  };
+
+  const afterSignUpAction = () => {
+    setOpen(true);
+  };
+
+  const handleDeleteWriting = async (writingId: string) => {
+    try {
+      await deleteWriting({ id: writingId });
+      const __writings = await getWritings({ userId: user?.id });
+      await mutateWritings(__writings, false);
+      toastMessage({
+        type: 'success',
+        message: 'success to delete writing.',
+      });
+    } catch (e) {
+      console.error(e);
+      toastMessage({
+        type: 'error',
+        message: 'failed to delete writing.',
+      });
+    }
+  };
+
+  console.log({ initialValue });
 
   return (
     <>
       <WritingListWrapper container spacing={3}>
         <CustomList>
           <HR />
-          {writings.map((item, index) => (
+          {writings.map((writing, index) => (
             <React.Fragment key={index}>
               <CustomListItem disablePadding>
-                <ListItemText primary={item.title} />
+                <ListItemText primary={writing.title} />
                 <ListItemSecondaryAction>
                   <IconButton
                     edge="end"
-                    aria-label="delete"
-                    // onClick={() => deleteItem(index)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                  {/* update */}
-                  <IconButton
-                    edge="end"
                     aria-label="update"
-                    onClick={handleOpen}
+                    onClick={() => handleUpdateOpen(writing)}
                   >
                     <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => handleDeleteWriting(writing.id)}
+                  >
+                    <DeleteIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
               </CustomListItem>
@@ -60,14 +119,22 @@ const WritingList: React.FC<WritingListProps> = (props) => {
           ))}
         </CustomList>
       </WritingListWrapper>
-      <WritingButton variant="contained" onClick={handleOpen}>
+      <WritingButton variant="contained" onClick={handleCreateOpen}>
         Create New
       </WritingButton>
-      <WritingDialog
-        open={open}
-        handleClose={handleClose}
-        handleOpen={handleOpen}
+      <LoginManager
+        afterLoginAction={afterLoginAction}
+        afterSignUpAction={afterSignUpAction}
+        isRequiredAuth={isRequiredAuth}
       />
+      <CreateWritingDialog open={open} handleClose={handleClose} />
+      {initialValue && (
+        <UpdateWritingDialog
+          open={openUpdate}
+          handleClose={handleUpdateClose}
+          writing={initialValue}
+        />
+      )}
     </>
   );
 };
