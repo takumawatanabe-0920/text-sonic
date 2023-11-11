@@ -12,11 +12,12 @@ type FormData = {
 
 type LoginDialogProps = {
   isRequiredAuth: boolean;
-  loginedAction?: () => void;
+  afterLoginAction?: () => void;
+  handleMoveSignUp: () => void;
 };
 
 const LoginDialog: React.FC<LoginDialogProps> = (props) => {
-  const { isRequiredAuth, loginedAction } = props;
+  const { isRequiredAuth, afterLoginAction, handleMoveSignUp } = props;
   const {
     mutateUser,
     user,
@@ -39,8 +40,8 @@ const LoginDialog: React.FC<LoginDialogProps> = (props) => {
       const user = await getCurrentUser();
       await mutateUser(user, false);
       closeLoginModalHandler();
-      if (loginedAction) {
-        loginedAction();
+      if (afterLoginAction) {
+        afterLoginAction();
       }
     } catch (e) {
       alert('Login failed. Please check your email and password.');
@@ -56,7 +57,12 @@ const LoginDialog: React.FC<LoginDialogProps> = (props) => {
   return (
     <Dialog open={openLoginModal}>
       <div style={{ margin: '20px' }}>
-        <LoginForm onSubmit={onSubmit} register={register} isValid={isValid} />
+        <LoginForm
+          onSubmit={onSubmit}
+          register={register}
+          isValid={isValid}
+          handleMoveSignUp={handleMoveSignUp}
+        />
       </div>
     </Dialog>
   );

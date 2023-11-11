@@ -7,9 +7,14 @@ export async function loginByEmail({
   email: string;
   password: string;
 }) {
-  await ApiClient.post('/auth/login', { email, password });
+  const res = await ApiClient.post('/auth/login', { email, password });
 
-  return;
+  return res.json();
+}
+
+export async function logout() {
+  // const res = await ApiClient.post('/auth/logout');
+  // return res.json();
 }
 
 export type GetCurrentUserResultType = {
@@ -25,4 +30,16 @@ export async function getCurrentUser(): Promise<GetCurrentUserResultType | null>
   } catch (e) {
     return null;
   }
+}
+
+export async function signUpByEmail({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
+  const res = await ApiClient.post('/users', { email, password });
+
+  return res.json();
 }

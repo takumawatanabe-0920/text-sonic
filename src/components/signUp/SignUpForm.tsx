@@ -9,15 +9,15 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Container from '~/components/parts/common/Container';
 
-type LoginFormProps = {
+type SignUpFormProps = {
   onSubmit: () => void;
   register: any;
   isValid: boolean;
-  handleMoveSignUp: () => void;
+  handleMoveLogin: () => void;
 };
 
-export const LoginForm: React.FC<LoginFormProps> = (props) => {
-  const { onSubmit, register, isValid, handleMoveSignUp } = props;
+export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
+  const { onSubmit, register, isValid, handleMoveLogin } = props;
 
   return (
     <Container>
@@ -34,7 +34,7 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign up
         </Typography>
         <Box component="form" onSubmit={onSubmit} sx={{ mt: 3 }} noValidate>
           <Grid container spacing={2}>
@@ -64,12 +64,12 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
             sx={{ mt: 3, mb: 2 }}
             disabled={!isValid}
           >
-            SIGN IN
+            SIGN UP
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link variant="body2" onClick={handleMoveSignUp}>
-                {"Don't have an account? Sign Up"}
+              <Link variant="body2" onClick={handleMoveLogin}>
+                Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
