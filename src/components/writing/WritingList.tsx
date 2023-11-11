@@ -17,7 +17,8 @@ import toastMessage from '~/components/parts/toast/ToastMessage';
 import CreateWritingDialog from '~/components/writing/CreateWritingDialog';
 import UpdateWritingDialog from '~/components/writing/UpdateWritingDialog';
 import { useUser } from '~/hooks/api/user';
-import { Writing, deleteWriting } from '~/lib/api/writing';
+import { useWritings } from '~/hooks/api/writing';
+import { Writing, deleteWriting, getWritings } from '~/lib/api/writing';
 
 type WritingListProps = {
   writings: Writing[];
@@ -30,6 +31,7 @@ const WritingList: React.FC<WritingListProps> = (props) => {
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
   const [initialValue, setInitialValue] = useState<Writing>();
   const { user } = useUser({ isRequiredAuth });
+  const { mutate: mutateWritings } = useWritings({});
 
   const handleCreateOpen = () => {
     setIsRequiredAuth(true);
@@ -69,8 +71,10 @@ const WritingList: React.FC<WritingListProps> = (props) => {
   const handleDeleteWriting = async (writingId: string) => {
     try {
       await deleteWriting({ id: writingId });
+      const __writings = await getWritings({ userId: user?.id });
+      await mutateWritings(__writings, false);
       toastMessage({
-        type: 'error',
+        type: 'success',
         message: 'success to delete writing.',
       });
     } catch (e) {
@@ -96,17 +100,17 @@ const WritingList: React.FC<WritingListProps> = (props) => {
                 <ListItemSecondaryAction>
                   <IconButton
                     edge="end"
-                    aria-label="delete"
-                    onClick={() => handleDeleteWriting(writing.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                  <IconButton
-                    edge="end"
                     aria-label="update"
                     onClick={() => handleUpdateOpen(writing)}
                   >
                     <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => handleDeleteWriting(writing.id)}
+                  >
+                    <DeleteIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
               </CustomListItem>
