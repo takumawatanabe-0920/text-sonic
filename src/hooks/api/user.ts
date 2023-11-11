@@ -10,19 +10,15 @@ export function useUser({
   const { data, isLoading, mutate } = useSWR('getCurrentUser', getCurrentUser);
   const user = data;
   const [isNeedLogin, setIsNeedLogin] = useState(false);
-  // const hasUser = Boolean(user);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
-  // useEffect(() => {
-  //   if (!redirectTo || isLoading) return;
-  //   if (
-  //     // If redirectTo is set, redirect if the user was not found.
-  //     (redirectTo && !redirectIfFound && !hasUser) ||
-  //     // If redirectIfFound is also set, redirect if the user was found
-  //     (redirectIfFound && hasUser)
-  //   ) {
-  //     router.push(redirectTo);
-  //   }
-  // }, [redirectTo, redirectIfFound, isLoading, hasUser]);
+  const openLoginModalHandler = () => {
+    setOpenLoginModal(true);
+  };
+
+  const closeLoginModalHandler = () => {
+    setOpenLoginModal(false);
+  };
 
   useEffect(() => {
     if (isRequiredAuth && !isLoading && !user) {
@@ -30,5 +26,19 @@ export function useUser({
     }
   }, [user, isLoading, isRequiredAuth]);
 
-  return { user, isLoading, mutateUser: mutate, isNeedLogin };
+  useEffect(() => {
+    if (isNeedLogin) {
+      setOpenLoginModal(true);
+    }
+  }, [isNeedLogin]);
+
+  return {
+    user,
+    isLoading,
+    mutateUser: mutate,
+    isNeedLogin,
+    openLoginModal,
+    openLoginModalHandler,
+    closeLoginModalHandler,
+  };
 }

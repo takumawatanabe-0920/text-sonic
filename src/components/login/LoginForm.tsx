@@ -7,47 +7,17 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import Container from '~/components/parts/common/Container';
 import { ROUTER_PATH } from '~/constants/router-path';
-import { useUser } from '~/hooks/api/user';
-import { getCurrentUser, loginByEmail } from '~/lib/api/user';
 
-type FormData = {
-  email: string;
-  password: string;
+type LoginFormProps = {
+  onSubmit: () => void;
+  register: any;
+  isValid: boolean;
 };
 
-export const LoginForm = () => {
-  const { mutateUser, user, isLoading } = useUser({
-    isRequiredAuth: false,
-  });
-  const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { isValid },
-  } = useForm<FormData>();
-
-  const onSubmit = handleSubmit(async (data: FormData) => {
-    const { email, password } = data;
-    try {
-      await loginByEmail({ email, password });
-      const user = await getCurrentUser();
-      await mutateUser(user, false);
-      router.push(ROUTER_PATH.HOME);
-    } catch (e) {
-      alert('Login failed. Please check your email and password.');
-    }
-  });
-
-  useEffect(() => {
-    if (user && !isLoading) {
-      router.push(ROUTER_PATH.HOME);
-    }
-  }, [user, isLoading]);
+export const LoginForm: React.FC<LoginFormProps> = (props) => {
+  const { onSubmit, register, isValid } = props;
 
   return (
     <Container>

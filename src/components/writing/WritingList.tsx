@@ -12,7 +12,9 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import LoginDialog from '~/components/login/LoginDialog';
 import WritingDialog from '~/components/writing/WritingDialog';
+import { useUser } from '~/hooks/api/user';
 
 type WritingListProps = {
   writings: {
@@ -24,9 +26,22 @@ type WritingListProps = {
 const WritingList: React.FC<WritingListProps> = (props) => {
   const { writings } = props;
   const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [isRequiredAuth, setIsRequiredAuth] = useState(false);
+  const { user } = useUser({ isRequiredAuth });
+  const handleOpen = () => {
+    setIsRequiredAuth(true);
+    if (!user) {
+      return;
+    }
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const loginedAction = () => {
+    setIsRequiredAuth(false);
+    setOpen(true);
+  };
 
   return (
     <>
@@ -63,6 +78,10 @@ const WritingList: React.FC<WritingListProps> = (props) => {
       <WritingButton variant="contained" onClick={handleOpen}>
         Create New
       </WritingButton>
+      <LoginDialog
+        isRequiredAuth={isRequiredAuth}
+        loginedAction={loginedAction}
+      />
       <WritingDialog
         open={open}
         handleClose={handleClose}
