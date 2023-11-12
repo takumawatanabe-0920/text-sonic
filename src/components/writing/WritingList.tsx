@@ -5,6 +5,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemSecondaryAction,
@@ -96,7 +97,11 @@ const WritingList: React.FC<WritingListProps> = (props) => {
           {writings.map((writing, index) => (
             <React.Fragment key={index}>
               <CustomListItem disablePadding>
-                <ListItemText primary={writing.title} />
+                <Link href={`/writing/${writing.id}`}>
+                  <a>
+                    <ListItemText primary={writing.title} />
+                  </a>
+                </Link>
                 <ListItemSecondaryAction>
                   <IconButton
                     edge="end"
