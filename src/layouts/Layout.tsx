@@ -39,14 +39,14 @@ const Container = styled.div`
   width: 100%;
   background-color: ${color.BLACK_100};
 
-  // コンテンツの高さを100vhにするために必要。これをしないとフッターに隙間ができる
-  // https://zenn.dev/catnose99/articles/a873bbbe25b15b
-  display: grid;
-  grid-template-rows: 1fr auto;
-  grid-template-columns: 100%;
-  min-height: 100vh;
+  // // コンテンツの高さを100vhにするために必要。これをしないとフッターに隙間ができる
+  // // https://zenn.dev/catnose99/articles/a873bbbe25b15b
+  // display: grid;
+  // grid-template-rows: 1fr auto;
+  // grid-template-columns: 100%;
+  // min-height: 100vh;
 
-  /* overflow: hidden; */
+  // /* overflow: hidden; */
 `;
 
 const BodyContainer = styled.div<{
