@@ -1,14 +1,5 @@
 import { ApiClient } from '~/lib/apiClient';
 
-export type Writing = {
-  id: string;
-  title: string;
-  description: string;
-
-  created_at: string;
-  updated_at: string;
-};
-
 export async function writingToSpeech({
   writingId,
 }: {
