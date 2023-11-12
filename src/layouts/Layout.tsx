@@ -11,20 +11,11 @@ export interface LayoutProps {
  * 共通Layout
  */
 const Layout = ({ children }: LayoutProps): JSX.Element => {
-  const [headerHeight, setHeaderHeight] = React.useState(0);
-  const headerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (headerRef.current) {
-      setHeaderHeight(headerRef.current.clientHeight);
-    }
-  }, [headerRef.current, headerRef.current?.clientHeight]);
-
   return (
     <LayoutWrapper>
       <Container>
-        <GlobalHeader rootRef={headerRef} />
-        <BodyContainer headerHeight={headerHeight}>{children}</BodyContainer>
+        <GlobalHeader />
+        <BodyContainer>{children}</BodyContainer>
       </Container>
     </LayoutWrapper>
   );
