@@ -45,6 +45,7 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
       });
       const __writings = await getWritings({ userId: user?.id });
       await mutateWritings(__writings, false);
+      handleClose();
     } catch (error) {
       console.error({ error });
       if (error instanceof Error) {
@@ -53,8 +54,6 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
           message: error.message || 'failed to create writing.',
         });
       }
-    } finally {
-      handleClose();
     }
   });
 

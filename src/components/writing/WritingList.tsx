@@ -89,8 +89,6 @@ const WritingList: React.FC<WritingListProps> = (props) => {
     }
   };
 
-  console.log({ initialValue });
-
   return (
     <>
       <WritingListWrapper container spacing={3}>

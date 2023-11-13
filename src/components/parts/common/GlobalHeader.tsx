@@ -45,6 +45,7 @@ const GlobalHeader = (): JSX.Element => {
       logout();
       await getCurrentUser();
       mutateUser(null);
+      handleClose();
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -53,8 +54,6 @@ const GlobalHeader = (): JSX.Element => {
           message: error.message || 'failed to logout.',
         });
       }
-    } finally {
-      handleClose();
     }
   };
 
