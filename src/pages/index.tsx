@@ -13,9 +13,12 @@ import { color } from '~/styles/utils';
 
 const Home: NextPage = () => {
   const { user } = useUser({ isRequiredAuth: false });
-  const { writings, mutate: mutateWritings } = useWritings({});
+  const { writings, mutate: mutateWritings } = useWritings({
+    userId: user?.id,
+  });
 
   useEffect(() => {
+    console.log({ user, key: 'why' });
     if (!user?.id) {
       return;
     }
@@ -25,6 +28,8 @@ const Home: NextPage = () => {
       await mutateWritings(__writings, false);
     })();
   }, [user?.id, mutateWritings]);
+
+  console.log({ writings, key: 'rerere' });
 
   return (
     <Layout>

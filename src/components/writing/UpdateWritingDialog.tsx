@@ -18,6 +18,7 @@ interface UpdateWritingDialogProps {
   open: boolean;
   handleClose: () => void;
   writing: Writing;
+  userId?: string | undefined;
 }
 
 type FormData = {
@@ -26,8 +27,8 @@ type FormData = {
 };
 
 const UpdateWritingDialog: React.FC<UpdateWritingDialogProps> = (props) => {
-  const { open, handleClose, writing } = props;
-  const { mutate: mutateWritings } = useWritings({});
+  const { open, handleClose, writing, userId } = props;
+  const { mutate: mutateWritings } = useWritings({ userId });
   const { user } = useUser({ isRequiredAuth: false });
 
   const {
@@ -48,21 +49,27 @@ const UpdateWritingDialog: React.FC<UpdateWritingDialogProps> = (props) => {
   const onSubmit = handleSubmit(async (data: FormData) => {
     const { title, description } = data;
     try {
-      await updateWriting({ id: writing.id, title, description });
+      await updateWriting({
+        id: writing.id,
+        title,
+        description,
+        scripts: writing.scripts,
+      });
       toastMessage({
         type: 'success',
         message: 'success to update writing.',
       });
       const __writings = await getWritings({ userId: user?.id });
       await mutateWritings(__writings, false);
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to update writing.',
-      });
-    } finally {
       handleClose();
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to update writing.',
+        });
+      }
     }
   });
 

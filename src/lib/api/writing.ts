@@ -4,6 +4,7 @@ export type Writing = {
   id: string;
   title: string;
   description: string;
+  scripts: string[];
 
   created_at: string;
   updated_at: string;
@@ -29,14 +30,17 @@ export async function updateWriting({
   id,
   title,
   description,
+  scripts,
 }: {
   id: string;
   description: string;
   title: string;
+  scripts: string[];
 }): Promise<Writing | undefined> {
   const res = await ApiClient.put(`/writings/${id}`, {
     title,
     description,
+    scripts,
   });
   return (await res.json()).message;
 }

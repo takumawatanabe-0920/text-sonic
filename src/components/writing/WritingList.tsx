@@ -5,6 +5,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemSecondaryAction,
@@ -31,7 +32,7 @@ const WritingList: React.FC<WritingListProps> = (props) => {
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
   const [initialValue, setInitialValue] = useState<Writing>();
   const { user } = useUser({ isRequiredAuth });
-  const { mutate: mutateWritings } = useWritings({});
+  const { mutate: mutateWritings } = useWritings({ userId: user?.id });
 
   const handleCreateOpen = () => {
     setIsRequiredAuth(true);
@@ -77,16 +78,16 @@ const WritingList: React.FC<WritingListProps> = (props) => {
         type: 'success',
         message: 'success to delete writing.',
       });
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to delete writing.',
-      });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to delete writing.',
+        });
+      }
     }
   };
-
-  console.log({ initialValue });
 
   return (
     <>
@@ -96,15 +97,19 @@ const WritingList: React.FC<WritingListProps> = (props) => {
           {writings.map((writing, index) => (
             <React.Fragment key={index}>
               <CustomListItem disablePadding>
-                <ListItemText primary={writing.title} />
+                <Link href={`/writing/${writing.id}`}>
+                  <ListItemText primary={writing.title} />
+                </Link>
                 <ListItemSecondaryAction>
-                  <IconButton
+                  <StyledIconButton
                     edge="end"
                     aria-label="update"
                     onClick={() => handleUpdateOpen(writing)}
+                    // don't allow to update if there is any script
+                    disabled={writing.scripts.length > 0}
                   >
                     <EditIcon />
-                  </IconButton>
+                  </StyledIconButton>
                   <IconButton
                     edge="end"
                     aria-label="delete"
@@ -127,12 +132,17 @@ const WritingList: React.FC<WritingListProps> = (props) => {
         afterSignUpAction={afterSignUpAction}
         isRequiredAuth={isRequiredAuth}
       />
-      <CreateWritingDialog open={open} handleClose={handleClose} />
+      <CreateWritingDialog
+        open={open}
+        handleClose={handleClose}
+        userId={user?.id}
+      />
       {initialValue && (
         <UpdateWritingDialog
           open={openUpdate}
           handleClose={handleUpdateClose}
           writing={initialValue}
+          userId={user?.id}
         />
       )}
     </>
@@ -169,6 +179,10 @@ const CustomListItem = styled(ListItem)`
 
 const HR = styled(Divider)`
   margin: 10px 0;
+`;
+
+const StyledIconButton = styled(IconButton)`
+  margin-right: 4px;
 `;
 
 export default WritingList;

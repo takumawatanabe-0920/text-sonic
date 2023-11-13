@@ -16,14 +16,9 @@ import toastMessage from '~/components/parts/toast/ToastMessage';
 import { useUser } from '~/hooks/api/user';
 import { getCurrentUser, logout } from '~/lib/api/user';
 
-interface PropsType {
-  headerTabs?: JSX.Element | undefined;
-  rootRef: React.RefObject<HTMLDivElement>;
-}
-
-const GlobalHeader = ({ rootRef }: PropsType): JSX.Element => {
+const GlobalHeader = (): JSX.Element => {
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
-  const { user, mutateUser, openLoginModalHandler } = useUser({
+  const { user, mutateUser } = useUser({
     isRequiredAuth,
   });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -45,14 +40,15 @@ const GlobalHeader = ({ rootRef }: PropsType): JSX.Element => {
       logout();
       await getCurrentUser();
       mutateUser(null);
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to logout.',
-      });
-    } finally {
       handleClose();
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to logout.',
+        });
+      }
     }
   };
 
@@ -70,7 +66,7 @@ const GlobalHeader = ({ rootRef }: PropsType): JSX.Element => {
   };
 
   return (
-    <StyledHeader ref={rootRef}>
+    <StyledHeader>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="fixed" color="primary">
           <Toolbar>

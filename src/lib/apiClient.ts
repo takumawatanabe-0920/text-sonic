@@ -22,7 +22,7 @@ async function get(path: string, params: Record<string, any> = {}) {
 
   if (!response.ok) {
     const err = await response.json();
-    throw new Error(err.error, err.statusCode);
+    throw new Error(err.detail || err.message, err.statusCode);
   }
 
   return response;
@@ -43,7 +43,7 @@ async function otherMethods(method: string, endpoint: string, data: any) {
 
   if (!response.ok) {
     const err = await response.json();
-    throw new Error(err.message, err.statusCode);
+    throw new Error(err.detail || err.message, err.statusCode);
   }
 
   return response;

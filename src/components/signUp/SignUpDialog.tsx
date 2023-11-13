@@ -48,12 +48,14 @@ const SignUpDialog: React.FC<SignUpDialogProps> = (props) => {
         type: 'success',
         message: 'success to sign up.',
       });
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to sign up.',
-      });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to sign up.',
+        });
+      }
     }
   });
 

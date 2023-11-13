@@ -17,6 +17,7 @@ import { createWriting, getWritings } from '~/lib/api/writing';
 interface WritingDialogProps {
   open: boolean;
   handleClose: () => void;
+  userId?: string | undefined;
 }
 
 type FormData = {
@@ -25,8 +26,8 @@ type FormData = {
 };
 
 const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
-  const { open, handleClose } = props;
-  const { mutate: mutateWritings } = useWritings({});
+  const { open, handleClose, userId } = props;
+  const { mutate: mutateWritings } = useWritings({ userId });
   const { user } = useUser({ isRequiredAuth: false });
 
   const {
@@ -45,14 +46,15 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
       });
       const __writings = await getWritings({ userId: user?.id });
       await mutateWritings(__writings, false);
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to create writing.',
-      });
-    } finally {
       handleClose();
+    } catch (error) {
+      console.error({ error });
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to create writing.',
+        });
+      }
     }
   });
 

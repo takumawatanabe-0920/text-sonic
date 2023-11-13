@@ -11,20 +11,11 @@ export interface LayoutProps {
  * 共通Layout
  */
 const Layout = ({ children }: LayoutProps): JSX.Element => {
-  const [headerHeight, setHeaderHeight] = React.useState(0);
-  const headerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (headerRef.current) {
-      setHeaderHeight(headerRef.current.clientHeight);
-    }
-  }, [headerRef.current, headerRef.current?.clientHeight]);
-
   return (
     <LayoutWrapper>
       <Container>
-        <GlobalHeader rootRef={headerRef} />
-        <BodyContainer headerHeight={headerHeight}>{children}</BodyContainer>
+        <GlobalHeader />
+        <BodyContainer>{children}</BodyContainer>
       </Container>
     </LayoutWrapper>
   );
@@ -48,14 +39,14 @@ const Container = styled.div`
   width: 100%;
   background-color: ${color.BLACK_100};
 
-  // コンテンツの高さを100vhにするために必要。これをしないとフッターに隙間ができる
-  // https://zenn.dev/catnose99/articles/a873bbbe25b15b
-  display: grid;
-  grid-template-rows: 1fr auto;
-  grid-template-columns: 100%;
-  min-height: 100vh;
+  // // コンテンツの高さを100vhにするために必要。これをしないとフッターに隙間ができる
+  // // https://zenn.dev/catnose99/articles/a873bbbe25b15b
+  // display: grid;
+  // grid-template-rows: 1fr auto;
+  // grid-template-columns: 100%;
+  // min-height: 100vh;
 
-  /* overflow: hidden; */
+  // /* overflow: hidden; */
 `;
 
 const BodyContainer = styled.div<{

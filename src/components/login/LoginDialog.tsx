@@ -48,12 +48,14 @@ const LoginDialog: React.FC<LoginDialogProps> = (props) => {
         type: 'success',
         message: 'success to login.',
       });
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to login.',
-      });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to login.',
+        });
+      }
     }
   });
 
