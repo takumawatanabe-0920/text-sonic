@@ -154,6 +154,12 @@ const mockData = {
   ],
 };
 
+type TranscriptInfo = {
+  start: number;
+  end: number;
+  word: string;
+};
+
 type SentenceInfo = {
   sentence: string;
   startTime: number;
@@ -171,9 +177,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
   const { handleSetCurrentPlaying, currentPlaying, writing, audioRef } = prop;
 
   const [mappedSentences, setMappedSentences] = useState<SentenceInfo[]>([]);
-  const [transcriptInfo, setTranscriptInfo] = useState<
-    typeof mockData.speech_word_list
-  >([]);
+  const [transcriptInfo, setTranscriptInfo] = useState<TranscriptInfo[]>([]);
 
   const handleClickTranscript = async () => {
     setTranscriptInfo(mockData.speech_word_list);
@@ -189,40 +193,26 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
     audio.play();
   };
 
-  useEffect(() => {
-    if (transcriptInfo.length === 0) {
-      return;
-    }
-    const originalScript = writing.description;
-    const generateSpeechScript = transcriptInfo
-      .map((info) => info.word)
-      .join(' ');
-    const originalWords = originalScript.split(' ');
-    const generateSpeechWords = generateSpeechScript.split(' ');
-
-    console.log({
-      originalScript,
-      generateSpeechScript,
-      originalWords,
-      generateSpeechWords,
-    });
-
-    let sentences = originalScript.replace(/-/g, ' ').split('.');
-    let googleWordsIndex = 0;
-    console.log({ sentences, transcriptInfo });
-
-    const mappedSentences = sentences
+  const processSentences = (originalScript: string) => {
+    const sentences = originalScript.replace(/-/g, ' ').split('.');
+    return sentences
       .map((sentence) => {
         if (!sentence || sentence === '' || sentence === ' ') {
           return;
         }
-        let words = sentence.replace(/[^\w\s]/g, '').split(' ');
-        console.log({
-          words,
-          googleWordsIndex,
-          s: transcriptInfo[googleWordsIndex],
-        });
+        return sentence.replace(/[^\w\s]/g, '').split(' ');
+      })
+      .filter((sentence): sentence is string[] => sentence !== undefined);
+  };
 
+  const mapSentences = (
+    sentences: string[][],
+    transcriptInfo: TranscriptInfo[],
+  ) => {
+    let googleWordsIndex = 0;
+
+    return sentences
+      .map((words) => {
         if (
           transcriptInfo[googleWordsIndex] == undefined ||
           transcriptInfo[googleWordsIndex]?.word === '' ||
@@ -247,16 +237,18 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
         const endTime = transcriptInfo[googleWordsIndex]?.end;
 
         return {
-          sentence,
+          sentence: words.join(' '),
           startTime,
           endTime,
         };
       })
-      .filter((sentence) => sentence !== undefined) as {
-      sentence: string;
-      startTime: number;
-      endTime: number;
-    }[];
+      .filter((sentence): sentence is SentenceInfo => sentence !== undefined);
+  };
+
+  useEffect(() => {
+    const sentences = processSentences(writing.description);
+
+    const mappedSentences = mapSentences(sentences, transcriptInfo);
     setMappedSentences(mappedSentences);
   }, [writing.description, transcriptInfo]);
 
