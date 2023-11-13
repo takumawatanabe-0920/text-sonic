@@ -64,6 +64,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
         currentPlaying={currentPlaying}
         writing={writing}
         audioRef={audioRef}
+        isGenerated={isGenerated}
       />
     </Container>
   );

@@ -171,10 +171,17 @@ interface TranscriptProps {
   currentPlaying: number;
   writing: Writing;
   audioRef: React.RefObject<HTMLAudioElement>;
+  isGenerated: boolean;
 }
 
 const Transcript: React.FC<TranscriptProps> = (prop) => {
-  const { handleSetCurrentPlaying, currentPlaying, writing, audioRef } = prop;
+  const {
+    handleSetCurrentPlaying,
+    currentPlaying,
+    writing,
+    audioRef,
+    isGenerated,
+  } = prop;
 
   const [mappedSentences, setMappedSentences] = useState<SentenceInfo[]>([]);
   const [transcriptInfo, setTranscriptInfo] = useState<TranscriptInfo[]>([]);
@@ -205,6 +212,44 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
       .filter((sentence): sentence is string[] => sentence !== undefined);
   };
 
+  const checkTranscriptAndWords = (
+    transcriptInfo: TranscriptInfo[],
+    googleWordsIndex: number,
+    words: string[],
+  ) => {
+    if (
+      transcriptInfo[googleWordsIndex] == undefined ||
+      transcriptInfo[googleWordsIndex]?.word === '' ||
+      transcriptInfo[googleWordsIndex]?.start == undefined ||
+      words.length === 0
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  const iterateWordsAndGetTime = (
+    words: string[],
+    transcriptInfo: TranscriptInfo[],
+    googleWordsIndex: number,
+  ) => {
+    const startTime = transcriptInfo[googleWordsIndex]?.start;
+
+    for (let word of words) {
+      if (
+        googleWordsIndex < transcriptInfo.length &&
+        word.toLowerCase() ===
+          transcriptInfo[googleWordsIndex]?.word.toLowerCase()
+      ) {
+        googleWordsIndex += 1;
+      }
+    }
+
+    const endTime = transcriptInfo[googleWordsIndex]?.end;
+
+    return { startTime, endTime, googleWordsIndex };
+  };
+
   const mapSentences = (
     sentences: string[][],
     transcriptInfo: TranscriptInfo[],
@@ -213,28 +258,17 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
 
     return sentences
       .map((words) => {
-        if (
-          transcriptInfo[googleWordsIndex] == undefined ||
-          transcriptInfo[googleWordsIndex]?.word === '' ||
-          transcriptInfo[googleWordsIndex]?.start == undefined ||
-          words.length === 0
-        ) {
+        if (!checkTranscriptAndWords(transcriptInfo, googleWordsIndex, words)) {
           return;
         }
 
-        const startTime = transcriptInfo[googleWordsIndex]?.start;
+        const {
+          startTime,
+          endTime,
+          googleWordsIndex: newGoogleWordsIndex,
+        } = iterateWordsAndGetTime(words, transcriptInfo, googleWordsIndex);
 
-        for (let word of words) {
-          if (
-            googleWordsIndex < transcriptInfo.length &&
-            word.toLowerCase() ===
-              transcriptInfo[googleWordsIndex]?.word.toLowerCase()
-          ) {
-            googleWordsIndex += 1;
-          }
-        }
-
-        const endTime = transcriptInfo[googleWordsIndex]?.end;
+        googleWordsIndex = newGoogleWordsIndex;
 
         return {
           sentence: words.join(' '),
@@ -254,7 +288,9 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
 
   return (
     <TranscriptWrapper>
-      <Button onClick={handleClickTranscript}>Read transcript</Button>
+      <Button onClick={handleClickTranscript} disabled={!isGenerated}>
+        Read transcript
+      </Button>
       {transcriptInfo.length > 0 && (
         <Box mt={5}>
           <Typography variant="h5" gutterBottom>
