@@ -55,12 +55,14 @@ const UpdateWritingDialog: React.FC<UpdateWritingDialogProps> = (props) => {
       });
       const __writings = await getWritings({ userId: user?.id });
       await mutateWritings(__writings, false);
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to update writing.',
-      });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to update writing.',
+        });
+      }
     } finally {
       handleClose();
     }

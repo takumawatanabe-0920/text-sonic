@@ -45,12 +45,14 @@ const GlobalHeader = (): JSX.Element => {
       logout();
       await getCurrentUser();
       mutateUser(null);
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to logout.',
-      });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to logout.',
+        });
+      }
     } finally {
       handleClose();
     }

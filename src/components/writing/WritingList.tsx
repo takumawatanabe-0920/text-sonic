@@ -78,12 +78,14 @@ const WritingList: React.FC<WritingListProps> = (props) => {
         type: 'success',
         message: 'success to delete writing.',
       });
-    } catch (e) {
-      console.error(e);
-      toastMessage({
-        type: 'error',
-        message: 'failed to delete writing.',
-      });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to delete writing.',
+        });
+      }
     }
   };
 
