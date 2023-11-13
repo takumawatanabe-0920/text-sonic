@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { getWriting, getWritings } from '~/lib/api/writing';
 
-export function useWritings({ userId }: { userId?: string }) {
+export function useWritings({ userId }: { userId?: string | undefined }) {
   const { data, isLoading, mutate, isValidating } = useSWR(
     'getWritings',
     async () => getWritings({ userId }),
