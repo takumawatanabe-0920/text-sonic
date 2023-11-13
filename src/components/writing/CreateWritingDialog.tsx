@@ -17,6 +17,7 @@ import { createWriting, getWritings } from '~/lib/api/writing';
 interface WritingDialogProps {
   open: boolean;
   handleClose: () => void;
+  userId?: string | undefined;
 }
 
 type FormData = {
@@ -25,8 +26,8 @@ type FormData = {
 };
 
 const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
-  const { open, handleClose } = props;
-  const { mutate: mutateWritings } = useWritings({});
+  const { open, handleClose, userId } = props;
+  const { mutate: mutateWritings } = useWritings({ userId });
   const { user } = useUser({ isRequiredAuth: false });
 
   const {

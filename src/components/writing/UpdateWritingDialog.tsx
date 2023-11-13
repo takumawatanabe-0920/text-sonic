@@ -18,6 +18,7 @@ interface UpdateWritingDialogProps {
   open: boolean;
   handleClose: () => void;
   writing: Writing;
+  userId?: string | undefined;
 }
 
 type FormData = {
@@ -26,8 +27,8 @@ type FormData = {
 };
 
 const UpdateWritingDialog: React.FC<UpdateWritingDialogProps> = (props) => {
-  const { open, handleClose, writing } = props;
-  const { mutate: mutateWritings } = useWritings({});
+  const { open, handleClose, writing, userId } = props;
+  const { mutate: mutateWritings } = useWritings({ userId });
   const { user } = useUser({ isRequiredAuth: false });
 
   const {

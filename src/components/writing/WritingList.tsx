@@ -32,7 +32,7 @@ const WritingList: React.FC<WritingListProps> = (props) => {
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
   const [initialValue, setInitialValue] = useState<Writing>();
   const { user } = useUser({ isRequiredAuth });
-  const { mutate: mutateWritings } = useWritings({});
+  const { mutate: mutateWritings } = useWritings({ userId: user?.id });
 
   const handleCreateOpen = () => {
     setIsRequiredAuth(true);
@@ -98,9 +98,7 @@ const WritingList: React.FC<WritingListProps> = (props) => {
             <React.Fragment key={index}>
               <CustomListItem disablePadding>
                 <Link href={`/writing/${writing.id}`}>
-                  <a>
-                    <ListItemText primary={writing.title} />
-                  </a>
+                  <ListItemText primary={writing.title} />
                 </Link>
                 <ListItemSecondaryAction>
                   <IconButton
@@ -132,12 +130,17 @@ const WritingList: React.FC<WritingListProps> = (props) => {
         afterSignUpAction={afterSignUpAction}
         isRequiredAuth={isRequiredAuth}
       />
-      <CreateWritingDialog open={open} handleClose={handleClose} />
+      <CreateWritingDialog
+        open={open}
+        handleClose={handleClose}
+        userId={user?.id}
+      />
       {initialValue && (
         <UpdateWritingDialog
           open={openUpdate}
           handleClose={handleUpdateClose}
           writing={initialValue}
+          userId={user?.id}
         />
       )}
     </>
