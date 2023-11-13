@@ -1,158 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { SpeechToText } from '~/lib/api/speechToText';
 import { Writing } from '~/lib/api/writing';
-
-const mockData = {
-  audio_time: 11.28,
-  speech_word_list: [
-    {
-      start: 0.0,
-      end: 0.5,
-      word: 'Elevate',
-    },
-    {
-      start: 0.5,
-      end: 0.7,
-      word: 'your',
-    },
-    {
-      start: 0.7,
-      end: 1.0,
-      word: 'English',
-    },
-    {
-      start: 1.0,
-      end: 1.2,
-      word: 'with',
-    },
-    {
-      start: 1.2,
-      end: 1.6,
-      word: 'every',
-    },
-    {
-      start: 1.6,
-      end: 1.9,
-      word: 'sentence',
-    },
-    {
-      start: 1.9,
-      end: 2.7,
-      word: 'our',
-    },
-    {
-      start: 2.7,
-      end: 3.1,
-      word: 'pioneering',
-    },
-    {
-      start: 3.1,
-      end: 3.6,
-      word: 'platform',
-    },
-    {
-      start: 3.6,
-      end: 4.2,
-      word: 'enables',
-    },
-    {
-      start: 4.2,
-      end: 4.4,
-      word: 'you',
-    },
-    {
-      start: 4.4,
-      end: 4.5,
-      word: 'to',
-    },
-    {
-      start: 4.5,
-      end: 4.9,
-      word: 'Penn',
-    },
-    {
-      start: 4.9,
-      end: 5.0,
-      word: 'daily',
-    },
-    {
-      start: 5.0,
-      end: 5.6,
-      word: 'sentences',
-    },
-    {
-      start: 5.6,
-      end: 5.9,
-      word: 'and',
-    },
-    {
-      start: 5.9,
-      end: 6.4,
-      word: 'seamlessly',
-    },
-    {
-      start: 6.4,
-      end: 7.3,
-      word: 'transforms',
-    },
-    {
-      start: 7.3,
-      end: 7.4,
-      word: 'them',
-    },
-    {
-      start: 7.4,
-      end: 7.7,
-      word: 'into',
-    },
-    {
-      start: 7.7,
-      end: 8.0,
-      word: 'spoken',
-    },
-    {
-      start: 8.0,
-      end: 8.3,
-      word: 'words',
-    },
-    {
-      start: 8.3,
-      end: 8.5,
-      word: 'through',
-    },
-    {
-      start: 8.5,
-      end: 8.8,
-      word: 'our',
-    },
-    {
-      start: 8.8,
-      end: 9.2,
-      word: 'Advanced',
-    },
-    {
-      start: 9.2,
-      end: 9.4,
-      word: 'text',
-    },
-    {
-      start: 9.4,
-      end: 9.8,
-      word: 'to',
-    },
-    {
-      start: 9.8,
-      end: 10.1,
-      word: 'speech',
-    },
-    {
-      start: 10.1,
-      end: 10.6,
-      word: 'technology.',
-    },
-  ],
-};
 
 type TranscriptInfo = {
   start: number;
@@ -187,7 +37,9 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
   const [transcriptInfo, setTranscriptInfo] = useState<TranscriptInfo[]>([]);
 
   const handleClickTranscript = async () => {
-    setTranscriptInfo(mockData.speech_word_list);
+    console.log({ writing });
+    const data = await SpeechToText({ writingId: writing.id });
+    setTranscriptInfo(data.speech_word_list);
   };
 
   const handleWordClick = (startTime: number) => {

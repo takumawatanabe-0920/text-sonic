@@ -16,11 +16,6 @@ import toastMessage from '~/components/parts/toast/ToastMessage';
 import { useUser } from '~/hooks/api/user';
 import { getCurrentUser, logout } from '~/lib/api/user';
 
-interface PropsType {
-  headerTabs?: JSX.Element | undefined;
-  rootRef: React.RefObject<HTMLDivElement>;
-}
-
 const GlobalHeader = (): JSX.Element => {
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
   const { user, mutateUser } = useUser({

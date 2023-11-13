@@ -48,7 +48,12 @@ const UpdateWritingDialog: React.FC<UpdateWritingDialogProps> = (props) => {
   const onSubmit = handleSubmit(async (data: FormData) => {
     const { title, description } = data;
     try {
-      await updateWriting({ id: writing.id, title, description });
+      await updateWriting({
+        id: writing.id,
+        title,
+        description,
+        scripts: writing.scripts,
+      });
       toastMessage({
         type: 'success',
         message: 'success to update writing.',
