@@ -101,13 +101,15 @@ const WritingList: React.FC<WritingListProps> = (props) => {
                   <ListItemText primary={writing.title} />
                 </Link>
                 <ListItemSecondaryAction>
-                  <IconButton
+                  <StyledIconButton
                     edge="end"
                     aria-label="update"
                     onClick={() => handleUpdateOpen(writing)}
+                    // don't allow to update if there is any script
+                    disabled={writing.scripts.length > 0}
                   >
                     <EditIcon />
-                  </IconButton>
+                  </StyledIconButton>
                   <IconButton
                     edge="end"
                     aria-label="delete"
@@ -177,6 +179,10 @@ const CustomListItem = styled(ListItem)`
 
 const HR = styled(Divider)`
   margin: 10px 0;
+`;
+
+const StyledIconButton = styled(IconButton)`
+  margin-right: 4px;
 `;
 
 export default WritingList;
