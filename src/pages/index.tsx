@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Container from '~/components/parts/common/Container';
 import SpeechifyScriptsDescription from '~/components/writing/SpeechifyScriptsDescription';
 import SpeechifyUsageGuide from '~/components/writing/SpeechifyUsageGuide';
@@ -10,7 +10,7 @@ import { useUser } from '~/hooks/api/user';
 import { useWritings } from '~/hooks/api/writing';
 import Layout from '~/layouts/Layout';
 import { getWritings } from '~/lib/api/writing';
-import { color } from '~/styles/utils';
+import { breakPointLessThan, color } from '~/styles/utils';
 
 const Home: NextPage = () => {
   const { user } = useUser({ isRequiredAuth: false });
@@ -65,6 +65,10 @@ const Title = styled.h2`
   font-size: 24px;
   font-weight: bold;
   color: ${color.BLACK};
+
+  ${breakPointLessThan.SP(css`
+    font-size: 20px;
+  `)}
 `;
 
 const ContentSection = styled.div`

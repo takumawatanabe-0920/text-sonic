@@ -10,11 +10,12 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import LoginManager from '~/components/login/LoginManager';
 import toastMessage from '~/components/parts/toast/ToastMessage';
 import { useUser } from '~/hooks/api/user';
 import { getCurrentUser, logout } from '~/lib/api/user';
+import { breakPointLessThan } from '~/styles/utils';
 
 const GlobalHeader = (): JSX.Element => {
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
@@ -76,7 +77,7 @@ const GlobalHeader = (): JSX.Element => {
               sx={{ flexGrow: 1 }}
               href={'/'}
             >
-              Speechify Scripts
+              <Title>Speechify Scripts</Title>
             </Typography>
             {user ? (
               <div>
@@ -128,5 +129,14 @@ const GlobalHeader = (): JSX.Element => {
 };
 
 const StyledHeader = styled.header``;
+
+const Title = styled.p`
+  font-weight: bold;
+  font-size: 20px;
+
+  ${breakPointLessThan.SP(css`
+    font-size: 18px;
+  `)}
+`;
 
 export default GlobalHeader;

@@ -64,7 +64,7 @@ export const color = {
   // REQUIRED: '#E03939',
   // DARK_BLUE: '#1A202C',
   WHITE: '#FFFFFF',
-  LITE_GRAY: '#F6F6F6',
+  LITE_GRAY: '#f5f5f5',
   BLACK_50: '#F8F8FB',
   BLACK_100: '#F2F3F5',
   BLACK_300: '#D8D8DB',

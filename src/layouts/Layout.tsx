@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import Footer from '~/components/parts/common/Footer';
 import GlobalHeader from '~/components/parts/common/GlobalHeader';
 import { color } from '~/styles/utils';
 
@@ -16,6 +17,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
       <Container>
         <GlobalHeader />
         <BodyContainer>{children}</BodyContainer>
+        <Footer />
       </Container>
     </LayoutWrapper>
   );

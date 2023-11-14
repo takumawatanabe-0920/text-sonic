@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { color } from '~/styles/utils';
+import styled, { css } from 'styled-components';
+import { breakPointLessThan, color } from '~/styles/utils';
 
 const SpeechifyScriptsDescription = () => {
   return (
@@ -53,11 +53,20 @@ const SpeechifyScriptsDescriptionTitle = styled.h3`
   font-weight: bold;
   margin-bottom: 10px;
   color: ${color.WHITE};
+
+  ${breakPointLessThan.SP(css`
+    font-size: 18px;
+  `)}
 `;
 
 const Description = styled.p`
   color: ${color.WHITE};
   font-weight: 500;
+
+  ${breakPointLessThan.SP(css`
+    font-size: 13px;
+    font-weight: 400;
+  `)}
 `;
 
 export default SpeechifyScriptsDescription;

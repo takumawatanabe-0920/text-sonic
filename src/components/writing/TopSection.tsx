@@ -1,19 +1,26 @@
-import styled from 'styled-components';
-import { color } from '~/styles/utils';
+import { useMediaQuery } from '@mui/material';
+import styled, { css } from 'styled-components';
+import { breakPoint, breakPointBetween, color, size } from '~/styles/utils';
 
 const TopSection = () => {
+  const isMoreThanTablet = useMediaQuery(
+    `(min-width: ${size.breakpoint.TABLET}px)`,
+  );
+
   return (
     <TopSectionWrapper>
-      <ImageTitle>Speechify Scripts: Your Pathway to Fluent English</ImageTitle>
-      <ImageDescription>
-        Elevate Your English with Every Sentence. Our pioneering platform
-        enables you to pen daily sentences and seamlessly transforms them into
-        spoken words through our advanced text-to-speech technology. Listen to
-        the natural intonation, and follow along with interactive subtitles to
-        sharpen your comprehension and pronunciation. With Speechify Scripts,
-        each interaction is a step toward language mastery, immersing you in an
-        enriching journey to English fluency.
-      </ImageDescription>
+      <ImageTitle>Your Pathway to Fluent English</ImageTitle>
+      {isMoreThanTablet && (
+        <ImageDescription>
+          Elevate Your English with Every Sentence. Our pioneering platform
+          enables you to pen daily sentences and seamlessly transforms them into
+          spoken words through our advanced text-to-speech technology. Listen to
+          the natural intonation, and follow along with interactive subtitles to
+          sharpen your comprehension and pronunciation. With Speechify Scripts,
+          each interaction is a step toward language mastery, immersing you in
+          an enriching journey to English fluency.
+        </ImageDescription>
+      )}
     </TopSectionWrapper>
   );
 };
@@ -24,21 +31,43 @@ const TopSectionWrapper = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   width: 100%;
-  padding: 30px;
-  padding-top: 350px;
   color: ${color.WHITE};
   text-shadow: 2px 2px 4px #000000;
+
+  ${breakPoint.PC(css`
+    padding: 30px;
+    padding-top: 350px;
+  `)}
+
+  ${breakPoint.TABLET(css`
+    padding: 15px;
+    padding-top: 100px;
+  `)}
+
+  ${breakPoint.SP(css`
+    padding: 20px 0;
+    padding-top: 200px;
+  `)}
 `;
 
 const ImageTitle = styled.h1`
-  font-size: 40px;
+  font-size: 32px;
   font-weight: bold;
   margin: 0 20px;
+
+  ${breakPointBetween(
+    size.breakpoint.SP,
+    size.breakpoint.TABLET,
+    css`
+      font-size: 24px;
+    `,
+  )}
 `;
 
 const ImageDescription = styled.p`
-  font-size: 20px;
+  font-size: 18px;
   margin: 20px;
+  max-width: 800px;
 `;
 
 export default TopSection;
