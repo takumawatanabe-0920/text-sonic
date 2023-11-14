@@ -2,7 +2,8 @@ import { NextPage } from 'next';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import Container from '~/components/parts/common/Container';
-import Benefits from '~/components/writing/Benefits';
+import SpeechifyScriptsDescription from '~/components/writing/SpeechifyScriptsDescription';
+import SpeechifyUsageGuide from '~/components/writing/SpeechifyUsageGuide';
 import TopSection from '~/components/writing/TopSection';
 import WritingList from '~/components/writing/WritingList';
 import { useUser } from '~/hooks/api/user';
@@ -42,7 +43,11 @@ const Home: NextPage = () => {
         </ContentSection>
         <ContentSection>
           <Title>Benefits of Using Our Service</Title>
-          <Benefits />
+          <SpeechifyScriptsDescription />
+        </ContentSection>
+        <ContentSection>
+          <Title>How to Use Speechify Scripts</Title>
+          <SpeechifyUsageGuide />
         </ContentSection>
       </StyledContainer>
     </Layout>
