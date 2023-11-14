@@ -42,7 +42,7 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
       await createWriting({ title, description });
       toastMessage({
         type: 'success',
-        message: 'success to create writing.',
+        message: 'success to create script.',
       });
       const __writings = await getWritings({ userId: user?.id });
       await mutateWritings(__writings, false);
@@ -52,7 +52,7 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
       if (error instanceof Error) {
         toastMessage({
           type: 'error',
-          message: error.message || 'failed to create writing.',
+          message: error.message || 'failed to create script.',
         });
       }
     }
@@ -63,7 +63,7 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
       <DialogInnerContainer>
         <DialogHeader>
           <DialogTitle id="form-dialog-title" style={{ padding: 0 }}>
-            Create Writing
+            Create Script
           </DialogTitle>
           <CloseButton onClick={handleClose}>
             <Close color="inherit" />

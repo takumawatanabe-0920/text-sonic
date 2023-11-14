@@ -1,4 +1,4 @@
-# text-sonic
+# Speechify Scripts
 
 ```
 $ npm install

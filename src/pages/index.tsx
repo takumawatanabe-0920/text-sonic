@@ -36,7 +36,7 @@ const Home: NextPage = () => {
       <TopSection />
       <StyledContainer>
         <ContentSection>
-          <Title>Writing List</Title>
+          <Title>Script List</Title>
 
           <WritingList writings={writings} />
         </ContentSection>
