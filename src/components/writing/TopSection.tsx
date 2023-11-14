@@ -65,7 +65,9 @@ const ImageTitle = styled.h1`
 `;
 
 const ImageDescription = styled.p`
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
   margin: 20px;
   max-width: 800px;
 `;
