@@ -150,7 +150,7 @@ const WritingList: React.FC<WritingListProps> = (props) => {
 };
 
 const WritingListWrapper = styled(Grid)`
-  margin-top: 20px;
+  margin-top: 20px !important;
   width: 100%;
 `;
 
@@ -178,7 +178,7 @@ const CustomListItem = styled(ListItem)`
 `;
 
 const HR = styled(Divider)`
-  margin: 10px 0;
+  margin: 10px 0 !important;
 `;
 
 const StyledIconButton = styled(IconButton)`

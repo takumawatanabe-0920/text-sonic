@@ -33,7 +33,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h2" component="h1" gutterBottom>
+      <Typography variant="h3" component="h2" gutterBottom>
         {writing.title}
       </Typography>
       <Typography variant="body1" gutterBottom>
