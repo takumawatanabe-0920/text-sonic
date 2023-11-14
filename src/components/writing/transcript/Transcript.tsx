@@ -52,97 +52,142 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
   };
 
   const processSentences = (originalScript: string) => {
-    const sentences = originalScript.replace(/-/g, ' ').split('.');
+    const sentences = originalScript
+      .split(/(\.)/)
+      .reduce((acc, val, idx, array) => {
+        if (val === '.') {
+          // 前の文字列とピリオドを結合
+          acc[acc.length - 1] += val;
+        } else if (idx < array.length - 1) {
+          // ピリオドの直前の文字列を追加
+          acc.push(val);
+        }
+        return acc;
+      }, []);
     return sentences
       .map((sentence) => {
         if (!sentence || sentence === '' || sentence === ' ') {
           return;
         }
-        const regex = /^[\s\u3000]+/;
-        // remove space at the beginning of the sentence
-        const replacedSentence = sentence.replace(regex, '');
-        return replacedSentence.split(' ');
+        // 先頭の空白を削除
+        const removeSpace = sentence.replace(/^\s+/, '');
+        return removeSpace.split(' ');
       })
       .filter((sentence): sentence is string[] => sentence != undefined);
   };
 
-  const checkTranscriptAndWords = (
+  const mapSentences2 = (
+    sentences: string[][],
     transcriptInfo: TranscriptInfo[],
-    googleWordsIndex: number,
-    words: string[],
+    writing: Writing,
   ) => {
-    if (
-      transcriptInfo[googleWordsIndex] == undefined ||
-      transcriptInfo[googleWordsIndex]?.word === '' ||
-      transcriptInfo[googleWordsIndex]?.start == undefined ||
-      words.length === 0
-    ) {
-      return false;
-    }
-    return true;
+    console.log({ sentences, transcriptInfo });
+    // 一致した要素を追跡するためのセット
+    let matchedIndices = new Set();
+    // sentenceの先頭文字からtranscriptInfoを検索。ただ一回ヒットしたら次回の探索対象から外す
+    sentences.forEach((subList) => {
+      if (subList.length > 0) {
+        const firstWord = subList[0];
+
+        // 未マッチのTranscriptInfoを検索
+        for (let i = 0; i < transcriptInfo.length; i++) {
+          console.log({
+            i,
+            matchedIndices,
+            is: transcriptInfo[i].word === firstWord,
+          });
+          const isPartialMatch =
+            transcriptInfo[i].word.includes(firstWord) ||
+            firstWord.includes(transcriptInfo[i].word);
+          const isNextMatch = transcriptInfo[i + 1]?.word === subList[1];
+          console.log({ isPartialMatch, isNextMatch });
+          if (!matchedIndices.has(i) && (isPartialMatch || isNextMatch)) {
+            console.log(`Match found: ${firstWord} at index ${i}`);
+            // マッチしたインデックスを追加
+            matchedIndices.add(i);
+            break; // マッチしたらループを終了
+          }
+        }
+      }
+    });
+    const sentenceStarts = findSentenceStarts(
+      writing.script || '',
+      writing.description,
+    );
+
+    sentenceStarts.forEach((sentenceStart) => {
+      const { original, generated } = sentenceStart;
+      const originalIndex = writing.script?.indexOf(original || '');
+      const generatedIndex = writing.description.indexOf(generated || '');
+      console.log({ originalIndex, generatedIndex });
+    });
   };
 
-  const iterateWordsAndGetTime = (
-    words: string[],
-    transcriptInfo: TranscriptInfo[],
-    googleWordsIndex: number,
-  ) => {
-    const startTime = transcriptInfo[googleWordsIndex]?.start;
+  function splitIntoWords(text: string): string[] {
+    return text.split(/\s+/);
+  }
 
-    for (let word of words) {
-      let _word = transcriptInfo[googleWordsIndex]?.word.toLowerCase() || '';
-      // .と,とかの記号を削除
-      _word = _word.replace(/[\.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
-      if (
-        googleWordsIndex < transcriptInfo.length &&
-        word.toLowerCase() === _word.toLowerCase()
-      ) {
-        googleWordsIndex += 1;
+  function findSentenceStarts(
+    originalText: string,
+    generatedText: string,
+  ): {
+    original: string | undefined;
+    generated: string | undefined;
+  }[] {
+    const originalWords = splitIntoWords(originalText);
+    const generatedWords = splitIntoWords(generatedText);
+    let sentenceStarts: {
+      original: string | undefined;
+      generated: string | undefined;
+    }[] = [];
+
+    console.log({ originalWords, generatedWords });
+
+    for (
+      let i = 0, j = 0;
+      i < originalWords.length && j < generatedWords.length;
+      i++
+    ) {
+      const originalLower = originalWords[i]?.toLowerCase();
+      const generatedLower = generatedWords[j]?.toLowerCase();
+
+      const isPartialMatch =
+        originalLower.includes(generatedLower) ||
+        generatedLower.includes(originalLower);
+      const isNextMatch =
+        originalWords[i + 1]?.toLowerCase() ===
+        generatedWords[j + 1]?.toLowerCase();
+
+      console.log({
+        is: isPartialMatch || isNextMatch,
+        original: originalLower,
+        generated: generatedLower,
+      });
+
+      if (isPartialMatch || isNextMatch) {
+        if (originalWords[i - 1]?.endsWith('.') || i === 0) {
+          const sentenceStart = {
+            original: originalWords[i],
+            generated: generatedWords[j],
+          };
+          sentenceStarts.push(sentenceStart);
+        }
+        j++;
       }
     }
 
-    const endTime = transcriptInfo[googleWordsIndex]?.end;
+    console.log({ sentenceStarts });
 
-    return { startTime, endTime, googleWordsIndex };
-  };
-
-  const mapSentences = (
-    sentences: string[][],
-    transcriptInfo: TranscriptInfo[],
-  ) => {
-    let googleWordsIndex = 0;
-
-    console.log({ sentences, transcriptInfo });
-
-    return sentences
-      .map((words) => {
-        if (!checkTranscriptAndWords(transcriptInfo, googleWordsIndex, words)) {
-          return;
-        }
-
-        const {
-          startTime,
-          endTime,
-          googleWordsIndex: newGoogleWordsIndex,
-        } = iterateWordsAndGetTime(words, transcriptInfo, googleWordsIndex);
-
-        googleWordsIndex = newGoogleWordsIndex;
-
-        console.log({ startTime, endTime, googleWordsIndex, words });
-
-        return {
-          sentence: words.join(' '),
-          startTime,
-          endTime,
-        };
-      })
-      .filter((sentence): sentence is SentenceInfo => sentence !== undefined);
-  };
+    return sentenceStarts;
+  }
 
   useEffect(() => {
-    const sentences = processSentences(writing.script || writing.description);
-    const mappedSentences = mapSentences(sentences, transcriptInfo);
-    setMappedSentences(mappedSentences);
+    const sentences = processSentences(writing.description);
+    // const mappedSentences = mapSentences(sentences, transcriptInfo);
+    mapSentences2(sentences, transcriptInfo, writing);
+    // console.log({ mappedSentences });
+    // setMappedSentences(mappedSentences);
+    // findSentenceStarts(writing.script || '', writing.description);
   }, [writing.script, writing.description, transcriptInfo]);
 
   return (
