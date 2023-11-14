@@ -132,6 +132,7 @@ const StyledHeader = styled.header``;
 
 const Title = styled.p`
   font-weight: bold;
+  font-size: 20px;
 
   ${breakPointLessThan.SP(css`
     font-size: 18px;
