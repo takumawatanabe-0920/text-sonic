@@ -4,6 +4,7 @@ export type Writing = {
   id: string;
   title: string;
   description: string;
+  script?: string | undefined;
   scripts: string[];
 
   created_at: string;

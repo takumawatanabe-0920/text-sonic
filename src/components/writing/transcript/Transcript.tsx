@@ -37,7 +37,6 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
   const [transcriptInfo, setTranscriptInfo] = useState<TranscriptInfo[]>([]);
 
   const handleClickTranscript = async () => {
-    console.log({ writing });
     const data = await SpeechToText({ writingId: writing.id });
     setTranscriptInfo(data.speech_word_list);
   };
@@ -59,9 +58,12 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
         if (!sentence || sentence === '' || sentence === ' ') {
           return;
         }
-        return sentence.replace(/[^\w\s]/g, '').split(' ');
+        const regex = /^[\s\u3000]+/;
+        // remove space at the beginning of the sentence
+        const replacedSentence = sentence.replace(regex, '');
+        return replacedSentence.split(' ');
       })
-      .filter((sentence): sentence is string[] => sentence !== undefined);
+      .filter((sentence): sentence is string[] => sentence != undefined);
   };
 
   const checkTranscriptAndWords = (
@@ -88,10 +90,12 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
     const startTime = transcriptInfo[googleWordsIndex]?.start;
 
     for (let word of words) {
+      let _word = transcriptInfo[googleWordsIndex]?.word.toLowerCase() || '';
+      // .と,とかの記号を削除
+      _word = _word.replace(/[\.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
       if (
         googleWordsIndex < transcriptInfo.length &&
-        word.toLowerCase() ===
-          transcriptInfo[googleWordsIndex]?.word.toLowerCase()
+        word.toLowerCase() === _word.toLowerCase()
       ) {
         googleWordsIndex += 1;
       }
@@ -108,6 +112,8 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
   ) => {
     let googleWordsIndex = 0;
 
+    console.log({ sentences, transcriptInfo });
+
     return sentences
       .map((words) => {
         if (!checkTranscriptAndWords(transcriptInfo, googleWordsIndex, words)) {
@@ -122,6 +128,8 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
 
         googleWordsIndex = newGoogleWordsIndex;
 
+        console.log({ startTime, endTime, googleWordsIndex, words });
+
         return {
           sentence: words.join(' '),
           startTime,
@@ -132,11 +140,10 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
   };
 
   useEffect(() => {
-    const sentences = processSentences(writing.description);
-
+    const sentences = processSentences(writing.script || writing.description);
     const mappedSentences = mapSentences(sentences, transcriptInfo);
     setMappedSentences(mappedSentences);
-  }, [writing.description, transcriptInfo]);
+  }, [writing.script, writing.description, transcriptInfo]);
 
   return (
     <TranscriptWrapper>
@@ -150,6 +157,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
           </Typography>
           <Typography variant="body1" gutterBottom>
             {mappedSentences.map((info, index) => {
+              console.log({ info });
               return (
                 <Fragment key={index}>
                   <span
