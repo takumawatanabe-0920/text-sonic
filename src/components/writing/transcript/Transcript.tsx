@@ -1,8 +1,10 @@
 import { Box, Button, Typography } from '@mui/material';
+import { red, yellow } from '@mui/material/colors';
 import { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SpeechToText } from '~/lib/api/speechToText';
 import { Writing } from '~/lib/api/writing';
+import { color } from '~/styles/utils';
 
 type TranscriptInfo = {
   start: number;
@@ -184,19 +186,13 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
               console.log({ info });
               return (
                 <Fragment key={index}>
-                  <span
+                  <HighlightSpan
                     onClick={() => handleWordClick(info.startTime)}
-                    style={{
-                      color:
-                        currentPlaying > info.startTime &&
-                        currentPlaying < info.endTime
-                          ? 'red'
-                          : 'black',
-                      cursor: 'pointer',
-                    }}
+                    currentPlaying={currentPlaying}
+                    info={info}
                   >
                     {info.sentence}
-                  </span>
+                  </HighlightSpan>
                 </Fragment>
               );
             })}
@@ -209,6 +205,24 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
 
 const TranscriptWrapper = styled.div`
   margin-top: 20px;
+`;
+
+const HighlightSpan = styled.span`
+  color: ${({
+    currentPlaying,
+    info,
+  }: {
+    currentPlaying: number;
+    info: SentenceInfo;
+  }) =>
+    currentPlaying > info.startTime && currentPlaying < (info?.endTime || 0)
+      ? red[500]
+      : color.BLACK};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${yellow[500]};
+  }
 `;
 
 export default Transcript;
