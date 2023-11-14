@@ -84,6 +84,8 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
     console.log({ sentences, transcriptInfo });
     // 一致した要素を追跡するためのセット
     let matchedIndices = new Set();
+    const mappedSentences: SentenceInfo[] = [];
+    let startTime = 0;
     // sentenceの先頭文字からtranscriptInfoを検索。ただ一回ヒットしたら次回の探索対象から外す
     sentences.forEach((subList) => {
       if (subList.length > 0) {
@@ -96,90 +98,70 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
             matchedIndices,
             is: transcriptInfo[i].word === firstWord,
           });
-          const isPartialMatch =
-            transcriptInfo[i].word.includes(firstWord) ||
-            firstWord.includes(transcriptInfo[i].word);
-          const isNextMatch = transcriptInfo[i + 1]?.word === subList[1];
+          const isPartialMatch = isCheckPartialMatch(
+            transcriptInfo[i].word,
+            firstWord,
+          );
+          const isNextMatch = isCheckPartialMatch(
+            transcriptInfo[i + 1]?.word,
+            subList[1],
+          );
           console.log({ isPartialMatch, isNextMatch });
           if (!matchedIndices.has(i) && (isPartialMatch || isNextMatch)) {
             console.log(`Match found: ${firstWord} at index ${i}`);
             // マッチしたインデックスを追加
             matchedIndices.add(i);
+            // センテンスの先頭の単語がマッチしたら、そのセンテンスの終わりの単語を探す
+            let endIndex = i;
+            for (let j = i + 1; j < transcriptInfo.length; j++) {
+              const isPartialMatch = isCheckPartialMatch(
+                transcriptInfo[j].word,
+                subList[subList.length - 1],
+              );
+
+              const isNextMatch =
+                transcriptInfo[j + 1]?.word === subList[subList.length - 1];
+              console.log({ isPartialMatch, isNextMatch });
+              if (isNextMatch || isPartialMatch) {
+                endIndex = j;
+                break;
+              }
+            }
+
+            const endTime = transcriptInfo[endIndex].end;
+
+            mappedSentences.push({
+              sentence: subList.join(' '),
+              startTime: startTime,
+              endTime: endTime,
+            });
+
+            startTime = endTime;
             break; // マッチしたらループを終了
           }
         }
       }
     });
-    const sentenceStarts = findSentenceStarts(
-      writing.script || '',
-      writing.description,
-    );
 
-    sentenceStarts.forEach((sentenceStart) => {
-      const { original, generated } = sentenceStart;
-      const originalIndex = writing.script?.indexOf(original || '');
-      const generatedIndex = writing.description.indexOf(generated || '');
-      console.log({ originalIndex, generatedIndex });
-    });
+    console.log({ mappedSentences });
+    return mappedSentences;
   };
 
-  function splitIntoWords(text: string): string[] {
-    return text.split(/\s+/);
-  }
+  const isCheckPartialMatch = (word1: string, word2: string) => {
+    // 大文字小文字も区別しない
+    const lowerWord1 = word1.toLowerCase();
+    const lowerWord2 = word2.toLowerCase();
+    // 一致したらtrue
+    return lowerWord1.includes(lowerWord2) || lowerWord2.includes(lowerWord1);
+  };
 
-  function findSentenceStarts(
-    originalText: string,
-    generatedText: string,
-  ): {
-    original: string | undefined;
-    generated: string | undefined;
-  }[] {
-    const originalWords = splitIntoWords(originalText);
-    const generatedWords = splitIntoWords(generatedText);
-    let sentenceStarts: {
-      original: string | undefined;
-      generated: string | undefined;
-    }[] = [];
-
-    console.log({ originalWords, generatedWords });
-
-    for (
-      let i = 0, j = 0;
-      i < originalWords.length && j < generatedWords.length;
-      i++
-    ) {
-      const originalLower = originalWords[i]?.toLowerCase();
-      const generatedLower = generatedWords[j]?.toLowerCase();
-
-      const isPartialMatch =
-        originalLower.includes(generatedLower) ||
-        generatedLower.includes(originalLower);
-      const isNextMatch =
-        originalWords[i + 1]?.toLowerCase() ===
-        generatedWords[j + 1]?.toLowerCase();
-
-      console.log({
-        is: isPartialMatch || isNextMatch,
-        original: originalLower,
-        generated: generatedLower,
-      });
-
-      if (isPartialMatch || isNextMatch) {
-        if (originalWords[i - 1]?.endsWith('.') || i === 0) {
-          const sentenceStart = {
-            original: originalWords[i],
-            generated: generatedWords[j],
-          };
-          sentenceStarts.push(sentenceStart);
-        }
-        j++;
-      }
-    }
-
-    console.log({ sentenceStarts });
-
-    return sentenceStarts;
-  }
+  const isCheckNextMatch = (word1: string, word2: string) => {
+    // 大文字小文字も区別しない
+    const lowerWord1 = word1.toLowerCase();
+    const lowerWord2 = word2.toLowerCase();
+    // 一致したらtrue
+    return lowerWord1 === lowerWord2;
+  };
 
   useEffect(() => {
     const sentences = processSentences(writing.description);
