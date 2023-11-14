@@ -72,7 +72,11 @@ const Title = styled.h2`
 `;
 
 const ContentSection = styled.div`
-  margin-top: 50px;
+  margin: 80px 0;
+
+  ${breakPointLessThan.SP(css`
+    margin: 50px 0;
+  `)}
 `;
 
 export default Home;
