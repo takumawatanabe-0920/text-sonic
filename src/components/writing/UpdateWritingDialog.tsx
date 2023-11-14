@@ -57,7 +57,7 @@ const UpdateWritingDialog: React.FC<UpdateWritingDialogProps> = (props) => {
       });
       toastMessage({
         type: 'success',
-        message: 'success to update writing.',
+        message: 'success to update script.',
       });
       const __writings = await getWritings({ userId: user?.id });
       await mutateWritings(__writings, false);
@@ -67,7 +67,7 @@ const UpdateWritingDialog: React.FC<UpdateWritingDialogProps> = (props) => {
       if (error instanceof Error) {
         toastMessage({
           type: 'error',
-          message: error.message || 'failed to update writing.',
+          message: error.message || 'failed to update script.',
         });
       }
     }
@@ -78,7 +78,7 @@ const UpdateWritingDialog: React.FC<UpdateWritingDialogProps> = (props) => {
       <DialogInnerContainer>
         <DialogHeader>
           <DialogTitle id="form-dialog-title" style={{ padding: 0 }}>
-            Update Writing
+            Update Script
           </DialogTitle>
           <CloseButton onClick={handleClose}>
             <Close color="inherit" />

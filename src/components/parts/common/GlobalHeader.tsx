@@ -76,7 +76,7 @@ const GlobalHeader = (): JSX.Element => {
               sx={{ flexGrow: 1 }}
               href={'/'}
             >
-              Text Sonic
+              Speechify Scripts
             </Typography>
             {user ? (
               <div>

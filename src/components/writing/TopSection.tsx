@@ -4,14 +4,14 @@ import { color } from '~/styles/utils';
 const TopSection = () => {
   return (
     <TopSectionWrapper>
-      <ImageTitle>Text Sonic: Your Pathway to Fluent English</ImageTitle>
+      <ImageTitle>Speechify Scripts: Your Pathway to Fluent English</ImageTitle>
       <ImageDescription>
         Elevate Your English with Every Sentence. Our pioneering platform
         enables you to pen daily sentences and seamlessly transforms them into
         spoken words through our advanced text-to-speech technology. Listen to
         the natural intonation, and follow along with interactive subtitles to
-        sharpen your comprehension and pronunciation. With Text Sonic, each
-        interaction is a step toward language mastery, immersing you in an
+        sharpen your comprehension and pronunciation. With Speechify Scripts,
+        each interaction is a step toward language mastery, immersing you in an
         enriching journey to English fluency.
       </ImageDescription>
     </TopSectionWrapper>
