@@ -6,14 +6,14 @@ import { Writing } from '~/lib/api/writing';
 
 type TranscriptInfo = {
   start: number;
-  end: number;
+  end: number | undefined;
   word: string;
 };
 
 type SentenceInfo = {
   sentence: string;
   startTime: number;
-  endTime: number;
+  endTime: number | undefined;
 };
 
 interface TranscriptProps {
@@ -54,7 +54,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
   const processSentences = (originalScript: string) => {
     const sentences = originalScript
       .split(/(\.)/)
-      .reduce((acc, val, idx, array) => {
+      .reduce((acc: string[], val, idx, array) => {
         if (val === '.') {
           // 前の文字列とピリオドを結合
           acc[acc.length - 1] += val;
@@ -64,6 +64,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
         }
         return acc;
       }, []);
+
     return sentences
       .map((sentence) => {
         if (!sentence || sentence === '' || sentence === ' ') {
@@ -76,10 +77,9 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
       .filter((sentence): sentence is string[] => sentence != undefined);
   };
 
-  const mapSentences2 = (
+  const mapSentences = (
     sentences: string[][],
     transcriptInfo: TranscriptInfo[],
-    writing: Writing,
   ) => {
     console.log({ sentences, transcriptInfo });
     // 一致した要素を追跡するためのセット
@@ -93,17 +93,17 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
 
         // 未マッチのTranscriptInfoを検索
         for (let i = 0; i < transcriptInfo.length; i++) {
-          console.log({
-            i,
-            matchedIndices,
-            is: transcriptInfo[i].word === firstWord,
-          });
+          const transcript = transcriptInfo[i];
+          if (!transcript) {
+            continue;
+          }
           const isPartialMatch = isCheckPartialMatch(
-            transcriptInfo[i].word,
+            transcript.word,
             firstWord,
           );
+          const nextTranscript = transcriptInfo[i + 1];
           const isNextMatch = isCheckPartialMatch(
-            transcriptInfo[i + 1]?.word,
+            nextTranscript?.word,
             subList[1],
           );
           console.log({ isPartialMatch, isNextMatch });
@@ -114,21 +114,24 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
             // センテンスの先頭の単語がマッチしたら、そのセンテンスの終わりの単語を探す
             let endIndex = i;
             for (let j = i + 1; j < transcriptInfo.length; j++) {
+              const transcript = transcriptInfo[j];
+              const nextTranscript = transcriptInfo[j + 1];
+              const lastWord = subList[subList.length - 1];
               const isPartialMatch = isCheckPartialMatch(
-                transcriptInfo[j].word,
-                subList[subList.length - 1],
+                transcript?.word,
+                lastWord,
               );
-
-              const isNextMatch =
-                transcriptInfo[j + 1]?.word === subList[subList.length - 1];
-              console.log({ isPartialMatch, isNextMatch });
+              const isNextMatch = isCheckPartialMatch(
+                nextTranscript?.word,
+                lastWord,
+              );
               if (isNextMatch || isPartialMatch) {
                 endIndex = j;
                 break;
               }
             }
 
-            const endTime = transcriptInfo[endIndex].end;
+            const endTime = transcriptInfo[endIndex]?.end;
 
             mappedSentences.push({
               sentence: subList.join(' '),
@@ -136,40 +139,34 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
               endTime: endTime,
             });
 
-            startTime = endTime;
+            startTime = endTime || 0;
             break; // マッチしたらループを終了
           }
         }
       }
     });
 
-    console.log({ mappedSentences });
     return mappedSentences;
   };
 
-  const isCheckPartialMatch = (word1: string, word2: string) => {
-    // 大文字小文字も区別しない
+  const isCheckPartialMatch = (
+    word1: string | undefined,
+    word2: string | undefined,
+  ) => {
+    if (!word1 || !word2) {
+      return false;
+    }
     const lowerWord1 = word1.toLowerCase();
     const lowerWord2 = word2.toLowerCase();
     // 一致したらtrue
     return lowerWord1.includes(lowerWord2) || lowerWord2.includes(lowerWord1);
   };
 
-  const isCheckNextMatch = (word1: string, word2: string) => {
-    // 大文字小文字も区別しない
-    const lowerWord1 = word1.toLowerCase();
-    const lowerWord2 = word2.toLowerCase();
-    // 一致したらtrue
-    return lowerWord1 === lowerWord2;
-  };
-
   useEffect(() => {
     const sentences = processSentences(writing.description);
-    // const mappedSentences = mapSentences(sentences, transcriptInfo);
-    mapSentences2(sentences, transcriptInfo, writing);
-    // console.log({ mappedSentences });
-    // setMappedSentences(mappedSentences);
-    // findSentenceStarts(writing.script || '', writing.description);
+    const mappedSentences = mapSentences(sentences, transcriptInfo);
+    console.log({ mappedSentences });
+    setMappedSentences(mappedSentences);
   }, [writing.script, writing.description, transcriptInfo]);
 
   return (
@@ -198,7 +195,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
                       cursor: 'pointer',
                     }}
                   >
-                    {`${info.sentence}. `}
+                    {info.sentence}
                   </span>
                 </Fragment>
               );
