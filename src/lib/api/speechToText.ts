@@ -2,7 +2,7 @@ import { ApiClient } from '~/lib/apiClient';
 
 export interface SpeechToTextResult {
   audio_time: number;
-  speech_word_list: Array<{ word: string; start: number; end: number }>;
+  sentences: Array<{ sentence: string; start_time: number; end_time: number }>;
 }
 export async function SpeechToText({
   writingId,
