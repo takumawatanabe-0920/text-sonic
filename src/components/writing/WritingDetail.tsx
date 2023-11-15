@@ -1,5 +1,6 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
+import { SpinnerForInner } from '~/components/parts/common/Loading';
 import Transcript from '~/components/writing/transcript/Transcript';
 import { Writing } from '~/lib/api/writing';
 import { writingToSpeech } from '~/lib/api/writingToSpeech';
@@ -12,9 +13,11 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
   const { writing } = props;
   const audioRef = useRef(null);
   const [isGenerated, setIsGenerated] = useState(false);
+  const [isLoadGenerated, setIsLoadGenerated] = useState(false);
   const [currentPlaying, setCurrentPlaying] = useState<number>(0);
 
   const handleGenerateSpeech = async () => {
+    setIsLoadGenerated(true);
     try {
       const url = await writingToSpeech({ writingId: writing.id });
       if (!url || !audioRef.current) {
@@ -24,6 +27,8 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
       setIsGenerated(true);
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoadGenerated(false);
     }
   };
 
@@ -44,11 +49,12 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
           variant="contained"
           color="primary"
           onClick={handleGenerateSpeech}
-          disabled={isGenerated}
+          disabled={isGenerated || isLoadGenerated}
         >
           Generate Speech
         </Button>
       </Box>
+      {isLoadGenerated && <SpinnerForInner />}
       <Box mt={5}>
         <Typography variant="h5" gutterBottom>
           Listen to the description here:

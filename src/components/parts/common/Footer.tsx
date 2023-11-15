@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components';
 import InstagramIcon from '~/components/parts/common/Icon/InstagramIcon';
 import { ROUTER_PATH } from '~/constants/router-path';
 import { useClient } from '~/hooks/useClient';
-import useMediaQuery from '~/hooks/useMediaQuery';
 import {
   breakPoint,
   breakPointBetween,
@@ -19,9 +18,6 @@ import {
  */
 const Footer = () => {
   const isCSR = useClient();
-  const isMoreThanTablet = useMediaQuery(
-    `(min-width: ${size.breakpoint.TABLET}px)`,
-  );
 
   if (!isCSR) {
     return null;
@@ -71,11 +67,7 @@ const StyledFooter = styled.div`
   width: 100%;
   background-color: ${color.LITE_GRAY};
   color: ${color.font.QUOTE};
-  padding: 24px 0;
-
-  ${breakPointLessThan.SP(css`
-    padding: 24px 16px;
-  `)}
+  padding: 24px 16px;
 `;
 
 const FooterContainer = styled.div`

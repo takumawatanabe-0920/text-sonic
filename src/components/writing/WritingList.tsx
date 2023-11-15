@@ -165,7 +165,7 @@ const WritingButton = styled(Button)`
 `;
 
 const CustomList = styled(List)`
-  padding-left: 30px;
+  padding-left: 30px !important;
   width: 100%;
 `;
 
