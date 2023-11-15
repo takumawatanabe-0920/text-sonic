@@ -4,6 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import GlobalStyle from '~/styles/globalstyles';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  console.log({
+    NEXT_PUBLIC_API_HOST_KEY: process.env.NEXT_PUBLIC_API_HOST_KEY,
+  });
   return (
     <>
       <GlobalStyle />
