@@ -76,7 +76,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
                     currentPlaying={currentPlaying}
                     info={info}
                   >
-                    {info.sentence}
+                    {`${info.sentence} `}
                   </HighlightSpan>
                 </Fragment>
               );
