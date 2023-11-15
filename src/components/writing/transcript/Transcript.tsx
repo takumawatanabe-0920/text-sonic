@@ -2,6 +2,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { red, yellow } from '@mui/material/colors';
 import { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { SpinnerForInner } from '~/components/parts/common/Loading';
 import { SpeechToText } from '~/lib/api/speechToText';
 import { Writing } from '~/lib/api/writing';
 import { color } from '~/styles/utils';
@@ -37,10 +38,18 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
 
   const [mappedSentences, setMappedSentences] = useState<SentenceInfo[]>([]);
   const [transcriptInfo, setTranscriptInfo] = useState<TranscriptInfo[]>([]);
+  const [isLoadTranscript, setIsLoadTranscript] = useState(false);
 
   const handleClickTranscript = async () => {
-    const data = await SpeechToText({ writingId: writing.id });
-    setTranscriptInfo(data.speech_word_list);
+    setIsLoadTranscript(true);
+    try {
+      const data = await SpeechToText({ writingId: writing.id });
+      setTranscriptInfo(data.speech_word_list);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoadTranscript(false);
+    }
   };
 
   const handleWordClick = (startTime: number) => {
@@ -176,6 +185,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
       <Button onClick={handleClickTranscript} disabled={!isGenerated}>
         Read transcript
       </Button>
+      {isLoadTranscript && <SpinnerForInner />}
       {transcriptInfo.length > 0 && (
         <Box mt={5}>
           <Typography variant="h5" gutterBottom>
