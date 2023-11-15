@@ -182,7 +182,7 @@ const HR = styled(Divider)`
 `;
 
 const StyledIconButton = styled(IconButton)`
-  margin-right: 4px;
+  margin-right: 4px !important;
 `;
 
 export default WritingList;
