@@ -65,20 +65,20 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
           ex. I like tennis... {`->`} I like tennis.
         </CareInfo>
       )}
-      <Button
-        onClick={handleClickTranscript}
-        disabled={!isGenerated}
-        variant="outlined"
-        color="primary"
-      >
-        Read transcript
-      </Button>
+      <Box display="flex" justifyContent="center" mt={4}>
+        <Button
+          onClick={handleClickTranscript}
+          disabled={!isGenerated}
+          variant="outlined"
+          color="primary"
+          style={{ width: '100%' }}
+        >
+          Read transcript
+        </Button>
+      </Box>
       {isLoadTranscript && <SpinnerForInner />}
       {mappedSentences.length > 0 && (
-        <Box mt={5}>
-          <Typography variant="h5" gutterBottom>
-            Transcript
-          </Typography>
+        <Box mt={4}>
           <Typography variant="body1" gutterBottom>
             {mappedSentences.map((info, index) => {
               return (

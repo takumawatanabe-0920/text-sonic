@@ -52,6 +52,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
             color="primary"
             onClick={handleGenerateSpeech}
             disabled={isGenerated || isLoadGenerated}
+            style={{ width: '100%' }}
           >
             Generate Speech
           </Button>
@@ -62,7 +63,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
         <Typography variant="h4" component="h3">
           <HereTitle>Listen to the Speech here</HereTitle>
         </Typography>
-        <audio
+        <StyledAudio
           ref={audioRef}
           controls
           onTimeUpdate={(e) => setCurrentPlaying((e.target as any).currentTime)}
@@ -88,7 +89,11 @@ const WritingTitle = styled.p`
 `;
 
 const HereTitle = styled.p`
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+`;
+
+const StyledAudio = styled.audio`
+  width: 100%;
 `;
 
 export default WritingDetail;
