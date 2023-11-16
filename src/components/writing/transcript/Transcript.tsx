@@ -57,7 +57,20 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
 
   return (
     <TranscriptWrapper>
-      <Button onClick={handleClickTranscript} disabled={!isGenerated}>
+      {isGenerated && (
+        <CareInfo>
+          ※ Certain scripts may not generate transcripts correctly. Correcting
+          grammar or specialized words might resolve the issue. <br />
+          ex. café {`->`} coffee <br />
+          ex. I like tennis... {`->`} I like tennis.
+        </CareInfo>
+      )}
+      <Button
+        onClick={handleClickTranscript}
+        disabled={!isGenerated}
+        variant="outlined"
+        color="primary"
+      >
         Read transcript
       </Button>
       {isLoadTranscript && <SpinnerForInner />}
@@ -68,7 +81,6 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
           </Typography>
           <Typography variant="body1" gutterBottom>
             {mappedSentences.map((info, index) => {
-              console.log({ info });
               return (
                 <Fragment key={index}>
                   <HighlightSpan
@@ -108,6 +120,12 @@ const HighlightSpan = styled.span`
   &:hover {
     background-color: ${yellow[500]};
   }
+`;
+
+const CareInfo = styled.div`
+  font-size: 12px;
+  margin-top: 8px;
+  margin-bottom: 16px;
 `;
 
 export default Transcript;

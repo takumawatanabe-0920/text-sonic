@@ -92,6 +92,12 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
               />
             </Grid>
           </Grid>
+          <CareInfo>
+            * Less than 1000 characters. Around 150 ~ 200 words. <br />
+            * When using specialized words, there is a risk that the transcript
+            may not generate correctly. <br />
+            ex. café {`->`} coffee <br />
+          </CareInfo>
           <ButtonsContainer>
             <StyledButton
               color="error"
@@ -114,6 +120,12 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
     </Dialog>
   );
 };
+
+const CareInfo = styled.div`
+  font-size: 12px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+`;
 
 const DialogInnerContainer = styled.div`
   padding: 16px;

@@ -1,5 +1,6 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
+import styled from 'styled-components';
 import { SpinnerForInner } from '~/components/parts/common/Loading';
 import Transcript from '~/components/writing/transcript/Transcript';
 import { Writing } from '~/lib/api/writing';
@@ -38,26 +39,28 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h3" component="h2" gutterBottom>
-        {writing.title}
-      </Typography>
-      <Typography variant="body1" gutterBottom>
-        {writing.description}
-      </Typography>
-      <Box display="flex" justifyContent="center" mt={3}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleGenerateSpeech}
-          disabled={isGenerated || isLoadGenerated}
-        >
-          Generate Speech
-        </Button>
-      </Box>
-      {isLoadGenerated && <SpinnerForInner />}
+      <WritingWrapper>
+        <Typography variant="h3" component="h2">
+          <WritingTitle>{writing.title}</WritingTitle>
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          {writing.description}
+        </Typography>
+        <Box display="flex" justifyContent="center" mt={3}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleGenerateSpeech}
+            disabled={isGenerated || isLoadGenerated}
+          >
+            Generate Speech
+          </Button>
+        </Box>
+        {isLoadGenerated && <SpinnerForInner />}
+      </WritingWrapper>
       <Box mt={5}>
-        <Typography variant="h5" gutterBottom>
-          Listen to the description here:
+        <Typography variant="h4" component="h3">
+          <HereTitle>Listen to the Speech here</HereTitle>
         </Typography>
         <audio
           ref={audioRef}
@@ -75,5 +78,17 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
     </Container>
   );
 };
+
+const WritingWrapper = styled.div`
+  margin-bottom: 80px;
+`;
+
+const WritingTitle = styled.p`
+  margin-bottom: 24px;
+`;
+
+const HereTitle = styled.p`
+  margin-bottom: 20px;
+`;
 
 export default WritingDetail;
