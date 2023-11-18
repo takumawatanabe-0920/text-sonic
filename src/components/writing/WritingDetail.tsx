@@ -147,7 +147,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
         gender={gender}
         writing={writing}
         audioRef={audioRef}
-        isGenerated={isGenerated}
+        isGenerated={isFirstGenerate}
       />
     </Container>
   );
