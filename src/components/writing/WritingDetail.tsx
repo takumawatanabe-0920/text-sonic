@@ -43,7 +43,6 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
 
   const handleGenerateSpeech = async () => {
     setIsLoadGenerated(true);
-    setIsFirstGenerate(true);
     try {
       const url = await writingToSpeech({
         writingId: writing.id,
@@ -54,6 +53,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
       }
       (audioRef.current as any).src = url;
       setIsGenerated(true);
+      setIsFirstGenerate(true);
     } catch (e) {
       console.error(e);
     } finally {
