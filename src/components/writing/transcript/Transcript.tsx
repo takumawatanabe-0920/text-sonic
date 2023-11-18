@@ -3,6 +3,7 @@ import { red, yellow } from '@mui/material/colors';
 import { Fragment, useState } from 'react';
 import styled from 'styled-components';
 import { SpinnerForInner } from '~/components/parts/common/Loading';
+import { GenderType, genderType } from '~/components/writing/WritingDetail';
 import { SpeechToText } from '~/lib/api/speechToText';
 import { Writing } from '~/lib/api/writing';
 import { color } from '~/styles/utils';
@@ -19,6 +20,7 @@ interface TranscriptProps {
   writing: Writing;
   audioRef: React.RefObject<HTMLAudioElement>;
   isGenerated: boolean;
+  gender: keyof GenderType;
 }
 
 const Transcript: React.FC<TranscriptProps> = (prop) => {
@@ -28,6 +30,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
     writing,
     audioRef,
     isGenerated,
+    gender,
   } = prop;
 
   const [mappedSentences, setMappedSentences] = useState<SentenceInfo[]>([]);
@@ -36,7 +39,10 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
   const handleClickTranscript = async () => {
     setIsLoadTranscript(true);
     try {
-      const data = await SpeechToText({ writingId: writing.id });
+      const data = await SpeechToText({
+        writingId: writing.id,
+        gender: genderType[gender],
+      });
       setMappedSentences(data.sentences);
     } catch (e) {
       console.error(e);

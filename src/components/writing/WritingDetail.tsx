@@ -21,13 +21,12 @@ type WritingDetailProps = {
   writing: Writing;
 };
 
-// enum
-type GenderType = {
+export type GenderType = {
   MALE: 1;
   FEMALE: 2;
 };
 
-const genderType: GenderType = {
+export const genderType: GenderType = {
   MALE: 1,
   FEMALE: 2,
 };
@@ -140,6 +139,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
       <Transcript
         handleSetCurrentPlaying={handleSetCurrentPlaying}
         currentPlaying={currentPlaying}
+        gender={gender}
         writing={writing}
         audioRef={audioRef}
         isGenerated={isGenerated}
