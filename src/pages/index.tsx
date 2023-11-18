@@ -19,7 +19,6 @@ const Home: NextPage = () => {
   });
 
   useEffect(() => {
-    console.log({ user, key: 'why' });
     if (!user?.id) {
       return;
     }
@@ -29,8 +28,6 @@ const Home: NextPage = () => {
       await mutateWritings(__writings, false);
     })();
   }, [user?.id, mutateWritings]);
-
-  console.log({ writings, key: 'rerere' });
 
   return (
     <Layout>
