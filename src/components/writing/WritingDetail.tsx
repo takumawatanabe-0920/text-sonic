@@ -36,12 +36,14 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
   const audioRef = useRef(null);
   const [isGenerated, setIsGenerated] = useState(false);
   const [isLoadGenerated, setIsLoadGenerated] = useState(false);
+  const [isFirstGenerate, setIsFirstGenerate] = useState(false);
   const [currentPlaying, setCurrentPlaying] = useState<number>(0);
   const [gender, setGender] = useState<keyof GenderType>('MALE');
   const [playbackRate, setPlaybackRate] = useState(1);
 
   const handleGenerateSpeech = async () => {
     setIsLoadGenerated(true);
+    setIsFirstGenerate(true);
     try {
       const url = await writingToSpeech({
         writingId: writing.id,
@@ -116,6 +118,9 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
             Generate Speech
           </Button>
         </Box>
+        {isFirstGenerate && !isGenerated && (
+          <Info>gender setting is changed, please generate again.</Info>
+        )}
         {isLoadGenerated && <SpinnerForInner />}
       </WritingWrapper>
       <Box mt={5}>
@@ -166,6 +171,12 @@ const StyledAudio = styled.audio`
 
 const AudioSpeedControlWrapper = styled.div`
   margin-bottom: 16px;
+`;
+
+const Info = styled.p`
+  margin-top: 12px;
+  color: #ff9800;
+  font-weight: bold;
 `;
 
 export default WritingDetail;
