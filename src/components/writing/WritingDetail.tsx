@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import AudioSpeedControl from '~/components/parts/audio/AudioSpeedControl';
 import { SpinnerForInner } from '~/components/parts/common/Loading';
 import Transcript from '~/components/writing/transcript/Transcript';
 import { Writing } from '~/lib/api/writing';
@@ -38,6 +39,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
   const [isLoadGenerated, setIsLoadGenerated] = useState(false);
   const [currentPlaying, setCurrentPlaying] = useState<number>(0);
   const [gender, setGender] = useState<keyof GenderType>('MALE');
+  const [playbackRate, setPlaybackRate] = useState(1);
 
   const handleGenerateSpeech = async () => {
     setIsLoadGenerated(true);
@@ -69,6 +71,14 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
     setIsGenerated(false);
   };
 
+  const handleSpeedChange = (speedRate: number) => {
+    setPlaybackRate(speedRate);
+    if (!audioRef.current) {
+      return;
+    }
+    (audioRef.current as any).playbackRate = speedRate;
+  };
+
   return (
     <Container maxWidth="sm">
       <WritingWrapper>
@@ -83,7 +93,7 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
             <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="female"
+              defaultValue="MALE"
               name="radio-buttons-group"
               onClick={handleGenderChange}
             >
@@ -113,6 +123,14 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
         <Typography variant="h4" component="h3">
           <HereTitle>Listen to the Speech here</HereTitle>
         </Typography>
+        {isGenerated && (
+          <AudioSpeedControlWrapper>
+            <AudioSpeedControl
+              handleSpeedChange={handleSpeedChange}
+              playbackRate={playbackRate}
+            />
+          </AudioSpeedControlWrapper>
+        )}
         <StyledAudio
           ref={audioRef}
           controls
@@ -144,6 +162,10 @@ const HereTitle = styled.p`
 
 const StyledAudio = styled.audio`
   width: 100%;
+`;
+
+const AudioSpeedControlWrapper = styled.div`
+  margin-bottom: 16px;
 `;
 
 export default WritingDetail;
