@@ -1,4 +1,14 @@
-import { Box, Button, Container, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { SpinnerForInner } from '~/components/parts/common/Loading';
@@ -10,17 +20,32 @@ type WritingDetailProps = {
   writing: Writing;
 };
 
+// enum
+type GenderType = {
+  MALE: 1;
+  FEMALE: 2;
+};
+
+const genderType: GenderType = {
+  MALE: 1,
+  FEMALE: 2,
+};
+
 export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
   const { writing } = props;
   const audioRef = useRef(null);
   const [isGenerated, setIsGenerated] = useState(false);
   const [isLoadGenerated, setIsLoadGenerated] = useState(false);
   const [currentPlaying, setCurrentPlaying] = useState<number>(0);
+  const [gender, setGender] = useState<keyof GenderType>('MALE');
 
   const handleGenerateSpeech = async () => {
     setIsLoadGenerated(true);
     try {
-      const url = await writingToSpeech({ writingId: writing.id });
+      const url = await writingToSpeech({
+        writingId: writing.id,
+        gender: genderType[gender],
+      });
       if (!url || !audioRef.current) {
         return;
       }
@@ -37,6 +62,13 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
     setCurrentPlaying(time);
   };
 
+  const handleGenderChange = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    setGender((e.target as any).value);
+    setIsGenerated(false);
+  };
+
   return (
     <Container maxWidth="sm">
       <WritingWrapper>
@@ -46,6 +78,24 @@ export const WritingDetail: React.FC<WritingDetailProps> = (props) => {
         <Typography variant="body1" gutterBottom>
           {writing.description}
         </Typography>
+        <Box display="flex" mt={3}>
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="female"
+              name="radio-buttons-group"
+              onClick={handleGenderChange}
+            >
+              <FormControlLabel value="MALE" control={<Radio />} label="Male" />
+              <FormControlLabel
+                value="FEMALE"
+                control={<Radio />}
+                label="Female"
+              />
+            </RadioGroup>
+          </FormControl>
+        </Box>
         <Box display="flex" justifyContent="center" mt={3}>
           <Button
             variant="contained"
