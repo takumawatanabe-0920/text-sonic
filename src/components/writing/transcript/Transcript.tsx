@@ -4,7 +4,9 @@ import { Fragment, useState } from 'react';
 import styled from 'styled-components';
 import { SpinnerForInner } from '~/components/parts/common/Loading';
 import { GenderType, genderType } from '~/components/writing/WritingDetail';
+import LanguageSelector from '~/components/writing/transcript/TranslateSelect';
 import { SpeechToText } from '~/lib/api/speechToText';
+import { transcriptToTranslate } from '~/lib/api/transcriptToTranslate';
 import { Writing } from '~/lib/api/writing';
 import { color } from '~/styles/utils';
 
@@ -61,6 +63,19 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
     audio.play();
   };
 
+  const handleTranslate = async (targetLanguage: string) => {
+    if (!isGenerated || !audioRef.current || !targetLanguage) {
+      return;
+    }
+
+    const sentences = await transcriptToTranslate({
+      targetLanguage,
+      sentences: mappedSentences,
+    });
+
+    setMappedSentences(sentences);
+  };
+
   return (
     <TranscriptWrapper>
       {isGenerated && (
@@ -83,6 +98,7 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
         </Button>
       </Box>
       {isLoadTranscript && <SpinnerForInner />}
+      <LanguageSelector handleTranslate={handleTranslate} />
       {mappedSentences.length > 0 && (
         <Box mt={4}>
           <Typography variant="body1" gutterBottom>
