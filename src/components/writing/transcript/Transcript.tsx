@@ -98,25 +98,31 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
         </Button>
       </Box>
       {isLoadTranscript && <SpinnerForInner />}
-      <LanguageSelector handleTranslate={handleTranslate} />
       {mappedSentences.length > 0 && (
-        <Box mt={4}>
-          <Typography variant="body1" gutterBottom>
-            {mappedSentences.map((info, index) => {
-              return (
-                <Fragment key={index}>
-                  <HighlightSpan
-                    onClick={() => handleWordClick(info.start_time)}
-                    currentPlaying={currentPlaying}
-                    info={info}
-                  >
-                    {`${info.sentence} `}
-                  </HighlightSpan>
-                </Fragment>
-              );
-            })}
-          </Typography>
-        </Box>
+        <>
+          <Box mt={4}>
+            <LanguageSelectorWrapper>
+              <LanguageSelector handleTranslate={handleTranslate} />
+            </LanguageSelectorWrapper>
+          </Box>
+          <Box mt={4}>
+            <Typography variant="body1" gutterBottom>
+              {mappedSentences.map((info, index) => {
+                return (
+                  <Fragment key={index}>
+                    <HighlightSpan
+                      onClick={() => handleWordClick(info.start_time)}
+                      currentPlaying={currentPlaying}
+                      info={info}
+                    >
+                      {`${info.sentence} `}
+                    </HighlightSpan>
+                  </Fragment>
+                );
+              })}
+            </Typography>
+          </Box>
+        </>
       )}
     </TranscriptWrapper>
   );
@@ -148,6 +154,10 @@ const CareInfo = styled.div`
   font-size: 12px;
   margin-top: 8px;
   margin-bottom: 16px;
+`;
+
+const LanguageSelectorWrapper = styled.div`
+  margin-top: 16px;
 `;
 
 export default Transcript;
