@@ -68,12 +68,14 @@ const Transcript: React.FC<TranscriptProps> = (prop) => {
       return;
     }
 
+    setIsLoadTranscript(true);
     const sentences = await transcriptToTranslate({
       targetLanguage,
       sentences: mappedSentences,
     });
 
     setMappedSentences(sentences);
+    setIsLoadTranscript(false);
   };
 
   return (
