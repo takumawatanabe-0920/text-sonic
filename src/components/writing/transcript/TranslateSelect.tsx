@@ -9,8 +9,12 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = (props) => {
   const { handleTranslate } = props;
 
   const handleLanguageChange = (event: any) => {
-    handleTranslate(event.target.value);
-    setLanguage(event.target.value);
+    const targetLanguage = event.target.value;
+    if (!targetLanguage || targetLanguage === language) {
+      return;
+    }
+    handleTranslate(targetLanguage);
+    setLanguage(targetLanguage);
   };
 
   return (
