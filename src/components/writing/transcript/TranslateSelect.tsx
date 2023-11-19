@@ -5,7 +5,7 @@ type LanguageSelectorProps = {
   handleTranslate: (targetLanguage: string) => void;
 };
 const LanguageSelector: React.FC<LanguageSelectorProps> = (props) => {
-  const [language, setLanguage] = React.useState('' as string);
+  const [language, setLanguage] = React.useState('en' as string);
   const { handleTranslate } = props;
 
   const handleLanguageChange = (event: any) => {
@@ -32,7 +32,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = (props) => {
         <MenuItem value="tr">Turkish (Türkçe)</MenuItem>
         <MenuItem value="fr">French (Français)</MenuItem>
         <MenuItem value="de">German (Deutsch)</MenuItem>
-        <MenuItem value="en">English (English)</MenuItem>
+        <MenuItem value="en">English</MenuItem>
       </Select>
     </FormControl>
   );
