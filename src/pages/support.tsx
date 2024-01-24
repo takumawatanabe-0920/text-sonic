@@ -76,10 +76,10 @@ const SupportPage: NextPage = () => {
               />
             ))}
           </FAQSection>
-          <LinkForContact>
+          {/* <LinkForContact>
             If you have any other questions, please contact us at{' '}
-            <CustomLink href="/contact">here</CustomLink>.
-          </LinkForContact>
+            <CustomLink href={ROUTER_PATH.CONTACT}>here</CustomLink>.
+          </LinkForContact> */}
         </ContentSection>
       </StyledContainer>
     </Layout>
