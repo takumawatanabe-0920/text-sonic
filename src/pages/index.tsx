@@ -40,12 +40,14 @@ const Home: NextPage = () => {
         </ContentSection>
         <ContentSection>
           <Title>How to Use Speechify Scripts</Title>
-          <VideoSection>
-            <CustomVideo controls>
-              <source src="/audio/service_explanation.mov" type="video/mp4" />
-            </CustomVideo>
-          </VideoSection>
-          <SpeechifyUsageGuide />
+          <ExplainContent>
+            <VideoSection>
+              <CustomVideo controls>
+                <source src="/audio/service_explanation.mov" type="video/mp4" />
+              </CustomVideo>
+            </VideoSection>
+            <SpeechifyUsageGuide />
+          </ExplainContent>
         </ContentSection>
         <ContentSection>
           <Title>Benefits of Using Our Service</Title>
@@ -82,13 +84,23 @@ const ContentSection = styled.div`
   `)}
 `;
 
+const ExplainContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+
+  ${breakPointLessThan.SP(css`
+    display: block;
+  `)}
+`;
+
 const VideoSection = styled.section`
   margin: 40px 0;
 `;
 
 const CustomVideo = styled.video`
   width: 100%;
-  max-width: 300px;
+  max-width: 350px;
   height: auto;
   border: 3px solid #333;
   border-radius: 8px;

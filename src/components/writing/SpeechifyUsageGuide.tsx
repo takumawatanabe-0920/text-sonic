@@ -3,10 +3,11 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SubtitlesIcon from '@mui/icons-material/Subtitles';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import styled from 'styled-components';
 
 const SpeechifyUsageGuide = () => {
   return (
-    <div>
+    <SpeechifyUsageGuideWrapper>
       <List>
         <ListItem>
           <ListItemIcon>
@@ -45,8 +46,13 @@ const SpeechifyUsageGuide = () => {
           />
         </ListItem>
       </List>
-    </div>
+    </SpeechifyUsageGuideWrapper>
   );
 };
+
+const SpeechifyUsageGuideWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 export default SpeechifyUsageGuide;
