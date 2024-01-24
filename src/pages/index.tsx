@@ -62,6 +62,7 @@ const Title = styled.h2`
   font-size: 24px;
   font-weight: bold;
   color: ${color.BLACK};
+  margin-bottom: 24px;
 
   ${breakPointLessThan.SP(css`
     font-size: 20px;

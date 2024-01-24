@@ -75,7 +75,7 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
               <TextField
                 fullWidth
                 id="title"
-                label="title"
+                label="title *"
                 type="title"
                 {...register('title', { required: true })}
               />
@@ -84,7 +84,7 @@ const CreateWritingDialog: React.FC<WritingDialogProps> = (props) => {
               <TextField
                 fullWidth
                 id="description"
-                label="description"
+                label="description *"
                 type="description"
                 multiline
                 rows={10}

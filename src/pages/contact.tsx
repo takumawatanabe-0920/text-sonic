@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import styled, { css } from 'styled-components';
+import { ContactForm } from '~/components/contact/ContactForm';
 import TopSection from '~/components/contact/TopSection';
 import Container from '~/components/parts/common/Container';
 import Layout from '~/layouts/Layout';
@@ -12,6 +13,7 @@ const ContactPage: NextPage = () => {
       <StyledContainer>
         <ContentSection>
           <Title>Contact us</Title>
+          <ContactForm />
         </ContentSection>
       </StyledContainer>
     </Layout>

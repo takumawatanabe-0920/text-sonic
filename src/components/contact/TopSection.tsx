@@ -4,6 +4,7 @@ import { breakPoint, breakPointBetween, color, size } from '~/styles/utils';
 const TopSection = () => {
   return (
     <TopSectionWrapper>
+      <Overlay />
       <ImageTitle>Contact</ImageTitle>
       <ImageDescription>
         If you have any questions or concerns, please contact us.
@@ -39,23 +40,24 @@ const TopSectionWrapper = styled.div`
     padding: 40px;
     height: 70vh;
   `)}
+`;
 
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: ${color.BLACK};
-    opacity: 0.6;
-    height: 100%;
-  }
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: ${color.BLACK};
+  opacity: 0.2;
+  height: 100%;
+  z-index: 0;
 `;
 
 const ImageTitle = styled.h1`
   font-size: 32px;
   font-weight: bold;
   margin: 0 20px;
+  z-index: 1;
 
   ${breakPointBetween(
     size.breakpoint.SP,
@@ -72,6 +74,7 @@ const ImageDescription = styled.p`
   letter-spacing: 0.5px;
   margin: 20px;
   max-width: 800px;
+  z-index: 1;
 `;
 
 export default TopSection;

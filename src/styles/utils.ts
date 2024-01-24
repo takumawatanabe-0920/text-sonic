@@ -42,8 +42,8 @@ export const size = {
     TABLET: 1024,
   },
   width: {
-    CONTENT_MAX_WITH_PADDING: 1100,
-    CONTENTS_MAX: 1440,
+    CONTENT_MAX_WITH_PADDING: 900,
+    CONTENTS_MAX: 1000,
   },
   height: {
     HEADER: 60,
@@ -80,6 +80,7 @@ export const color = {
     WHITE: '#FFFFFF',
     BLACK: '#222222',
     BLUE: '#1976d2',
+    DARK_BLUE: '#002063',
     DARK_GRAY: '#6C6C6C',
     GRAY: '#747474',
     LIGHT_GRAY: '#626264',

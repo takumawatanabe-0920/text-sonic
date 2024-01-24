@@ -4,6 +4,7 @@ import { breakPoint, breakPointBetween, color, size } from '~/styles/utils';
 const TopSection = () => {
   return (
     <TopSectionWrapper>
+      <Overlay />
       <ImageTitle>About Speechify Scripts</ImageTitle>
     </TopSectionWrapper>
   );
@@ -20,6 +21,7 @@ const TopSectionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
+  position: relative;
 
   ${breakPoint.SP(css`
     padding: 20px 0;
@@ -37,10 +39,22 @@ const TopSectionWrapper = styled.div`
   `)}
 `;
 
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: ${color.BLACK};
+  opacity: 0.2;
+  height: 100%;
+  z-index: 0;
+`;
+
 const ImageTitle = styled.h1`
   font-size: 32px;
   font-weight: bold;
   margin: 0 20px;
+  z-index: 1;
 
   ${breakPointBetween(
     size.breakpoint.SP,
