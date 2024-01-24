@@ -31,7 +31,7 @@ interface AnimationContentProps {
 
 const AnimationContent: React.FC<AnimationContentProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const checkVisibility = () => {
     if (!ref.current) return;
