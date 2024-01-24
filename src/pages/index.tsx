@@ -39,12 +39,17 @@ const Home: NextPage = () => {
           <WritingList writings={writings} />
         </ContentSection>
         <ContentSection>
-          <Title>Benefits of Using Our Service</Title>
-          <SpeechifyScriptsDescription />
+          <Title>How to Use Speechify Scripts</Title>
+          <VideoSection>
+            <CustomVideo controls>
+              <source src="/audio/service_explanation.mov" type="video/mp4" />
+            </CustomVideo>
+          </VideoSection>
+          <SpeechifyUsageGuide />
         </ContentSection>
         <ContentSection>
-          <Title>How to Use Speechify Scripts</Title>
-          <SpeechifyUsageGuide />
+          <Title>Benefits of Using Our Service</Title>
+          <SpeechifyScriptsDescription />
         </ContentSection>
       </StyledContainer>
     </Layout>
@@ -75,6 +80,18 @@ const ContentSection = styled.div`
   ${breakPointLessThan.SP(css`
     margin: 50px 0;
   `)}
+`;
+
+const VideoSection = styled.section`
+  margin: 40px 0;
+`;
+
+const CustomVideo = styled.video`
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border: 3px solid #333;
+  border-radius: 8px;
 `;
 
 export default Home;
