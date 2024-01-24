@@ -12,7 +12,9 @@ import {
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import LoginManager from '~/components/login/LoginManager';
+import HeaderHamburgerMenu from '~/components/parts/common/HumbergerMenu';
 import toastMessage from '~/components/parts/toast/ToastMessage';
+import { ROUTER_PATH } from '~/constants/router-path';
 import { useUser } from '~/hooks/api/user';
 import { getCurrentUser, logout } from '~/lib/api/user';
 import { breakPointLessThan } from '~/styles/utils';
@@ -79,43 +81,59 @@ const GlobalHeader = (): JSX.Element => {
             >
               <Title>Speechify Scripts</Title>
             </Typography>
-            {user ? (
-              <div>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleLogout}>
-                    Logout {`(${user.email})`}
-                  </MenuItem>
-                </Menu>
-              </div>
-            ) : (
-              <Button color="inherit" onClick={handleLoginOpen}>
-                Login
-              </Button>
-            )}
+            <HeaderRight>
+              <HeaderNav>
+                <NavList>
+                  <NavItem>
+                    {/* <RuleLink href={ROUTER_PATH.CONTACT}>Contact us</RuleLink> */}
+                  </NavItem>
+                  <NavItem>
+                    <RuleLink href={ROUTER_PATH.SUPPORT}>Support</RuleLink>
+                  </NavItem>
+                  <NavItem>
+                    <RuleLink href={ROUTER_PATH.ABOUT}>About us</RuleLink>
+                  </NavItem>
+                </NavList>
+              </HeaderNav>
+              {user ? (
+                <div>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleLogout}>
+                      Logout {`(${user.email})`}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              ) : (
+                <Button color="inherit" onClick={handleLoginOpen}>
+                  Login
+                </Button>
+              )}
+              <HeaderHamburgerMenu />
+            </HeaderRight>
           </Toolbar>
         </AppBar>
         <LoginManager
@@ -137,6 +155,39 @@ const Title = styled.p`
   ${breakPointLessThan.SP(css`
     font-size: 18px;
   `)}
+`;
+
+const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const HeaderNav = styled.nav`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 24px;
+
+  ${breakPointLessThan.SP(css`
+    display: none;
+  `)}
+`;
+
+const NavList = styled.ul`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const NavItem = styled.li`
+  margin-left: 24px;
+`;
+
+const RuleLink = styled.a`
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+  text-decoration: none;
 `;
 
 export default GlobalHeader;

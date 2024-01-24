@@ -33,20 +33,23 @@ const TopSectionWrapper = styled.div`
   width: 100%;
   color: ${color.WHITE};
   text-shadow: 2px 2px 4px #000000;
-
-  ${breakPoint.PC(css`
-    padding: 30px;
-    padding-top: 350px;
-  `)}
-
-  ${breakPoint.TABLET(css`
-    padding: 15px;
-    padding-top: 100px;
-  `)}
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 
   ${breakPoint.SP(css`
     padding: 20px 0;
-    padding-top: 200px;
+    height: 50vh;
+  `)}
+
+  ${breakPoint.TABLET(css`
+    padding: 20px;
+    height: 60vh;
+  `)}
+
+  ${breakPoint.PC(css`
+    padding: 40px;
+    height: 70vh;
   `)}
 `;
 
@@ -59,7 +62,7 @@ const ImageTitle = styled.h1`
     size.breakpoint.SP,
     size.breakpoint.TABLET,
     css`
-      font-size: 24px;
+      font-size: 28px;
     `,
   )}
 `;

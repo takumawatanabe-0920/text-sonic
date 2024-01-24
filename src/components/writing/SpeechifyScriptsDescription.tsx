@@ -3,49 +3,64 @@ import { breakPointLessThan, color } from '~/styles/utils';
 
 const SpeechifyScriptsDescription = () => {
   return (
-    <div>
+    <Cards>
       <SpeechifyScriptsDescriptionCard>
         <SpeechifyScriptsDescriptionTitle>
-          Service Introduction
+          Advanced Features:
         </SpeechifyScriptsDescriptionTitle>
         <Description>
-          Speechify Scripts is an innovative service that transforms your
-          written English into a dynamic audio experience. Watch as your daily
-          writings come to life as real-time speech.
+          Our service, equipped with advanced text-to-speech technology, offers
+          a dynamic way to improve your English speaking and listening skills,
+          pronunciation, and comprehension. Perfect for learners at all levels
+          seeking a comprehensive tool for English mastery.
         </Description>
       </SpeechifyScriptsDescriptionCard>
 
       <SpeechifyScriptsDescriptionCard>
         <SpeechifyScriptsDescriptionTitle>
-          Learning Benefits
+          Customizable Audio Playback:
         </SpeechifyScriptsDescriptionTitle>
         <Description>
-          Utilizing this service can enhance your English speaking and listening
-          skills in a natural way. Your written texts will be played back as
-          clear and fluent speech.
+          Adjust the speech speed to suit your learning pace.
         </Description>
       </SpeechifyScriptsDescriptionCard>
 
       <SpeechifyScriptsDescriptionCard>
         <SpeechifyScriptsDescriptionTitle>
-          Subtitle Functionality and Pronunciation Improvement
+          Diverse Voice Options:
         </SpeechifyScriptsDescriptionTitle>
         <Description>
-          Take advantage of the audio playback with subtitles feature to hear
-          how your English really sounds. This can be greatly beneficial for
-          improving your pronunciation. Speechify Scripts is your reliable
-          partner in the journey of English learning.
+          Choose between male and female voices for a varied listening
+          experience.
         </Description>
       </SpeechifyScriptsDescriptionCard>
-    </div>
+
+      <SpeechifyScriptsDescriptionCard>
+        <SpeechifyScriptsDescriptionTitle>
+          Subtitles in 10 Languages:
+        </SpeechifyScriptsDescriptionTitle>
+        <Description>
+          Enhance understanding for non-native speakers.
+        </Description>
+      </SpeechifyScriptsDescriptionCard>
+    </Cards>
   );
 };
+
+const Cards = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  ${breakPointLessThan.SP(css`
+    grid-template-columns: 1fr;
+  `)}
+`;
 
 const SpeechifyScriptsDescriptionCard = styled.div`
   background-color: ${color.BLUE};
   border-radius: 10px;
   padding: 2em;
-  margin: 1em 0;
 `;
 
 const SpeechifyScriptsDescriptionTitle = styled.h3`

@@ -42,7 +42,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
               <TextField
                 fullWidth
                 id="email"
-                label="email"
+                label="email *"
                 type="email"
                 {...register('email', { required: true })}
               />
@@ -51,7 +51,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
               <TextField
                 fullWidth
                 id="password"
-                label="password"
+                label="password *"
                 type="password"
                 {...register('password', { required: true })}
               />

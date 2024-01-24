@@ -1,7 +1,8 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import styled, { css } from 'styled-components';
 import InstagramIcon from '~/components/parts/common/Icon/InstagramIcon';
+import LinkedInIcon from '~/components/parts/common/Icon/LinkedInIcon';
+import TwitterIcon from '~/components/parts/common/Icon/TwitterIcon';
 import { ROUTER_PATH } from '~/constants/router-path';
 import { useClient } from '~/hooks/useClient';
 import {
@@ -37,25 +38,22 @@ const Footer = () => {
               target="_blank"
               rel="noopener"
             >
-              <InstagramIcon color={color.border.GRAY} />
+              <InstagramIcon />
             </SNSItem>
             <SNSItem href={ROUTER_PATH.TWITTER} target="_blank" rel="noopener">
-              <Image
-                width={40}
-                height={40}
-                layout="responsive"
-                alt="X-Icon"
-                src="/images/twitter-icon.svg"
-              />
+              <TwitterIcon />
+            </SNSItem>
+            <SNSItem href={ROUTER_PATH.LINKEDIN} target="_blank" rel="noopener">
+              <LinkedInIcon />
             </SNSItem>
           </SNSList>
         </FooterTop>
         <HR />
         <FooterBottom>
           <RuleLinks>
-            <RuleLink href={ROUTER_PATH.CONTACT} target="_blank" rel="noopener">
-              Contact
-            </RuleLink>
+            {/* <RuleLink href={ROUTER_PATH.CONTACT}>Contact us</RuleLink> */}
+            <RuleLink href={ROUTER_PATH.SUPPORT}>Support</RuleLink>
+            <RuleLink href={ROUTER_PATH.ABOUT}>About us</RuleLink>
           </RuleLinks>
         </FooterBottom>
       </FooterContainer>
@@ -122,6 +120,7 @@ const SNSList = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 110px;
 
   ${breakPointLessThan.SP(css`
     margin-top: 24px;
@@ -131,7 +130,6 @@ const SNSList = styled.div`
 const SNSItem = styled.a`
   display: flex;
   align-items: center;
-  width: 40px;
   font-weight: ${size.fontWeight.W7};
 `;
 
