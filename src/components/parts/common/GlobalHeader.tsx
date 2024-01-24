@@ -128,7 +128,12 @@ const GlobalHeader = (): JSX.Element => {
                   </Menu>
                 </div>
               ) : (
-                <Button color="inherit" onClick={handleLoginOpen}>
+                <Button
+                  color="inherit"
+                  onClick={handleLoginOpen}
+                  variant="outlined"
+                  sx={{ mr: 2 }}
+                >
                   Login
                 </Button>
               )}
