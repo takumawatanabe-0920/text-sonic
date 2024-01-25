@@ -21,7 +21,7 @@ import { breakPointLessThan } from '~/styles/utils';
 
 const GlobalHeader = (): JSX.Element => {
   const [isRequiredAuth, setIsRequiredAuth] = useState(false);
-  const { user, mutateUser } = useUser({
+  const { user, mutateUser, isLoading } = useUser({
     isRequiredAuth,
   });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -128,14 +128,18 @@ const GlobalHeader = (): JSX.Element => {
                   </Menu>
                 </div>
               ) : (
-                <Button
-                  color="inherit"
-                  onClick={handleLoginOpen}
-                  variant="outlined"
-                  sx={{ mr: 2 }}
-                >
-                  Login
-                </Button>
+                <>
+                  {!isLoading && (
+                    <Button
+                      color="inherit"
+                      onClick={handleLoginOpen}
+                      variant="outlined"
+                      sx={{ mr: 2 }}
+                    >
+                      Login
+                    </Button>
+                  )}
+                </>
               )}
               <HeaderHamburgerMenu />
             </HeaderRight>
