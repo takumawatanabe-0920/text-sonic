@@ -4,7 +4,9 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { useForm } from 'react-hook-form';
 import Container from '~/components/parts/common/Container';
+import toastMessage from '~/components/parts/toast/ToastMessage';
 import { useUser } from '~/hooks/api/user';
+import { createContact } from '~/lib/api/contact';
 
 type FormData = {
   email: string;
@@ -16,13 +18,29 @@ export const ContactForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isValid },
   } = useForm<FormData>();
   const { user } = useUser({ isRequiredAuth: false });
 
   const onSubmit = handleSubmit(async (data: FormData) => {
     const { email, name, description } = data;
-    console.log(email, name, description);
+    try {
+      await createContact({ email, name, description });
+      toastMessage({
+        type: 'success',
+        message: 'success to create contact.',
+      });
+      reset();
+    } catch (error) {
+      console.error({ error });
+      if (error instanceof Error) {
+        toastMessage({
+          type: 'error',
+          message: error.message || 'failed to create contact.',
+        });
+      }
+    }
   });
 
   return (
