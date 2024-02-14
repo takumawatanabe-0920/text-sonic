@@ -51,7 +51,7 @@ const Footer = () => {
         <HR />
         <FooterBottom>
           <RuleLinks>
-            {/* <RuleLink href={ROUTER_PATH.CONTACT}>Contact us</RuleLink> */}
+            <RuleLink href={ROUTER_PATH.CONTACT}>Contact us</RuleLink>
             <RuleLink href={ROUTER_PATH.SUPPORT}>Support</RuleLink>
             <RuleLink href={ROUTER_PATH.ABOUT}>About us</RuleLink>
           </RuleLinks>
