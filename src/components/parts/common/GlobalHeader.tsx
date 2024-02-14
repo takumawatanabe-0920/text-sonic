@@ -85,7 +85,7 @@ const GlobalHeader = (): JSX.Element => {
               <HeaderNav>
                 <NavList>
                   <NavItem>
-                    {/* <RuleLink href={ROUTER_PATH.CONTACT}>Contact us</RuleLink> */}
+                    <RuleLink href={ROUTER_PATH.CONTACT}>Contact us</RuleLink>
                   </NavItem>
                   <NavItem>
                     <RuleLink href={ROUTER_PATH.SUPPORT}>Support</RuleLink>

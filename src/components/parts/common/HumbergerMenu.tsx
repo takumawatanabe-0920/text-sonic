@@ -53,7 +53,9 @@ const HeaderHamburgerMenu = () => {
           <MenuItem onClick={handleClose}>
             <RuleLink href={ROUTER_PATH.ABOUT}>About us</RuleLink>
           </MenuItem>
-          {/* <MenuItem onClick={handleClose}><RuleLink href={ROUTER_PATH.CONTACT}>Contact us</RuleLink></MenuItem> */}
+          <MenuItem onClick={handleClose}>
+            <RuleLink href={ROUTER_PATH.CONTACT}>Contact us</RuleLink>
+          </MenuItem>
         </Menu>
       </Toolbar>
     </HeaderHamburgerMenuWrapper>
