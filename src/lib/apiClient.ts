@@ -1,8 +1,7 @@
 import pickQueryParams from '~/lib/pickQueryParams';
 import { storageClient } from '~/lib/storage';
 
-// const SERVER_ROOT = process.env.NEXT_PUBLIC_API_HOST_KEY || '';
-const SERVER_ROOT = 'http://localhost:8081';
+const SERVER_ROOT = process.env.NEXT_PUBLIC_API_HOST_KEY || '';
 
 async function get(path: string, params: Record<string, any> = {}) {
   const queryParams = pickQueryParams(params);
